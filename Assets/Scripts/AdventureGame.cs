@@ -57,7 +57,7 @@ public class AdventureGame : MonoBehaviour
     /***
      *      Roll N dice with S sides and return the resulting value.  Number returned is from 1 to S.
     ***/
-    public ushort RollDice(uint dice, uint sides)
+    public uint RollDice(uint dice, uint sides)
     {
         uint total = 0;
         uint die, i;

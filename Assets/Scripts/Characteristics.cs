@@ -5,7 +5,7 @@ using UnityEngine;
 public class Characteristics : MonoBehaviour
 {
     [SerializeField]
-    public ushort level;        // Level of the character.
+    public uint level;        // Level of the character.
     [SerializeField]
     public ushort hits;         // Whole number of hits the character can take
     [SerializeField]
@@ -15,17 +15,17 @@ public class Characteristics : MonoBehaviour
     [SerializeField]
     public ushort halfSP;       // Set to 5 totoal spell points has a franction of 1/2
     [SerializeField]
-    public ushort strength;     // Strength points
+    public uint strength;     // Strength points
     [SerializeField]
-    public ushort intel;          // Intelligence (IQ) points
+    public uint intel;          // Intelligence (IQ) points
     [SerializeField]
-    public ushort wisdom;       // Wisdom points
+    public uint wisdom;       // Wisdom points
     [SerializeField]
-    public ushort const;        // Constitution points
+    public uint constitution;        // Constitution points
     [SerializeField]
-    public ushort dex;          // Dexterity points
+    public uint dex;          // Dexterity points
     [SerializeField]
-    public ushort agility;      // Agility points
+    public uint agility;      // Agility points
     [SerializeField]
     public ushort size;         // Size points
     [SerializeField]

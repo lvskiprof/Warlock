@@ -22,7 +22,7 @@ public class Mage : MonoBehaviour
          *      Roll all characteristics that are not required for a Mage first.
         ***/
         stats.strength = game.RollDice(3, 6);
-        stats.Wisdon = game.RollDice(3, 6);
+        stats.wisdom = game.RollDice(3, 6);
         stats.strength = game.RollDice(3, 6);
         stats.strength = game.RollDice(3, 6);
         stats.strength = game.RollDice(3, 6);
