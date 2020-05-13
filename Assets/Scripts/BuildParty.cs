@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class BuildParty : MonoBehaviour
+public class BuildParty
 {
-	/***
+    /***
      *      This is the creator that we need to use to access the public methods
      *  in this class.
     ***/
-	public BuildParty()
-	{   //Instance creator
+    public BuildParty()
+    {   //Instance creator
 
-	}   // BuildParty()
+    }   // BuildParty()
 
-	/***
+    /***
      *      This method will create a Mage character.
     ***/
-	void CreateMage(AdventureGame game)
+    void CreateMage(AdventureGame game)
 	{
 
 	}   // CreateMage()
@@ -37,12 +37,12 @@ public class BuildParty : MonoBehaviour
 		switch (response)
 		{
 			case 'M':
-				game.StoryAreaText(selected + "a Mage" + yourCharacter);
+				//game.StoryAreaText(selected + "a Mage" + yourCharacter);
 				PC = new Mage();
 				break;
 			case 'F':
 				game.StoryAreaText(selected + "a Fighter" + yourCharacter);
-				break;
+                break;
 			case 'C':
 				game.StoryAreaText(selected + "a Cleric" + yourCharacter);
 				break;
@@ -64,7 +64,7 @@ public class BuildParty : MonoBehaviour
 
 		if (valid)
 		{   // Create this character and the rest of the party and go to the next state
-			Thread.Sleep(3 * 1000); // Sleep for 3 seconds so text can be read
+			//Thread.Sleep(3 * 1000); // Sleep for 3 seconds so text can be read
 
 		}   // if
 

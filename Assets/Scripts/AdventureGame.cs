@@ -13,28 +13,54 @@ public class AdventureGame : MonoBehaviour
 	[SerializeField] State state;
 	State[] nextStates;
 
-	private enum textID
+    public Text _TextHeader;
+    public Text _TextBody;
+    public Text _TextStory;
+
+    // singleton
+    private static AdventureGame instance;
+
+    // Construct
+    private AdventureGame()
+    {
+
+    }
+
+    // Instance
+    public static AdventureGame Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = GameObject.FindObjectOfType(typeof(AdventureGame)) as AdventureGame;
+            return instance;
+        }
+    }
+
+    private enum textID
 	{   // Index values into textComponents[] to get at the different text areas
 		storyText,      // Story text where what is going on is displayed
 		storyAreaText,  // Story area text where questions and responses are displayed
 		headingText     // Header text area
 	};
 
-	/***
-    *      This is the base creator that we need to use to access the public methods in this class.
-    ***/
-	public AdventureGame()
-	{   //Instance creator
+	///***
+ //   *      This is the base creator that we need to use to access the public methods in this class.
+ //   ***/
+	//public AdventureGame()
+	//{   //Instance creator
 
-	}   // AdventureGame()
+	//}   // AdventureGame()
 
 	/***
      *      This method will output the string argument to the HeadingText field on the screen.
     ***/
 	public void HeadingText(string text)
 	{
-		if (text.Length != 0)
-			textList[(int)textID.headingText].text = text;
+		//if (text.Length != 0)
+		//	textList[(int)textID.headingText].text = text;
+
+        _TextHeader.text = text;
 	}   // HeadingText()
 
 	/***
@@ -42,18 +68,26 @@ public class AdventureGame : MonoBehaviour
     ***/
 	public void StoryText(string text)
 	{
-		if (text.Length != 0)
-			textList[(int)textID.storyText].text = text;
-	}   // StoryText()
+        //if (text.Length != 0)
+        //	textList[(int)textID.storyText].text = text;
+
+        _TextStory.text = text;
+
+    }   // StoryText()
 
 	/***
      *      This method will output the string argument to the StoryAreaText field on the screen.
     ***/
 	public void StoryAreaText(string text)
 	{
-		if (text.Length != 0)
-			textList[(int)textID.storyAreaText].text = text;
-	}   // StoryAreaText()
+        //if (text.Length != 0)
+        //{
+        //    textList[(int)textID.storyAreaText].text = text;
+        //}
+
+        _TextBody.text = text;
+
+    }   // StoryAreaText()
 
 	/***
      *      Method to handle processing Action methods.  Some states only have an action and then
