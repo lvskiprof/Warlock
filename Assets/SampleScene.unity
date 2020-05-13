@@ -498,6 +498,9 @@ MonoBehaviour:
   textComponent: {fileID: 268967571}
   textAreaComponent: {fileID: 1916029404}
   state: {fileID: 11400000, guid: 77ba95e16c0e75742868952e50aede8b, type: 2}
+  _TextHeader: {fileID: 1970842510}
+  _TextBody: {fileID: 1916029404}
+  _TextStory: {fileID: 268967571}
 --- !u!4 &1414584883
 Transform:
   m_ObjectHideFlags: 0
