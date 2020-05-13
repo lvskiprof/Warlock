@@ -10,7 +10,7 @@ public class AdventureGame : MonoBehaviour
 	[SerializeField] private Text[] textList;
 	[SerializeField] Text textComponent;
 	[SerializeField] Text textAreaComponent;
-	[SerializeField] State state;
+	[SerializeField] public State state;
 	State[] nextStates;
 
     public Text _TextHeader;
@@ -94,7 +94,7 @@ public class AdventureGame : MonoBehaviour
      *  they move on to the next state.  Others require a valid response first before doing the
      *  action method.  Putting this as a separate method simplifies the code needed to handle actions.
     ***/
-	private bool PerformAction(State state, char response)
+	public bool PerformAction(State state, char response)
 	{
 		bool validResponse = false;
 
@@ -104,9 +104,9 @@ public class AdventureGame : MonoBehaviour
 				validResponse = true;
 				break;
 			case State.stateAction.buildParty:
-				BuildParty buildParty = new BuildParty();
-				validResponse = buildParty.BuildExpeditionParty(this, response);
-				break;
+                this.gameObject.GetComponent<BuildParty>().BuildExpeditionParty(this, response);
+                StartCoroutine(DeleyForStoryText(true));
+                break;
 			case State.stateAction.buildBadGuys:
 				break;
 			case State.stateAction.moveToDungeon:
@@ -221,4 +221,9 @@ public class AdventureGame : MonoBehaviour
 
 		ManageState();
 	}   // Update()
+
+    IEnumerator DeleyForStoryText(bool returnValue)
+    {
+        yield return new WaitForSeconds(3);
+    }
 }   // class AdventureGame

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class BuildParty
+public class BuildParty : MonoBehaviour
 {
     /***
      *      This is the creator that we need to use to access the public methods
@@ -27,7 +27,7 @@ public class BuildParty
     ***/
 
 	//public bool BuildExpeditionParty(GameObject gameObject, char response)
-	public bool BuildExpeditionParty(AdventureGame game, char response)
+	public void BuildExpeditionParty(AdventureGame game, char response)
 	{
 		const string selected = "You have selected ";
 		const string yourCharacter = " as your character.";
@@ -62,12 +62,14 @@ public class BuildParty
 				break;
 		}   // switch
 
-		if (valid)
+        
+
+        if (valid)
 		{   // Create this character and the rest of the party and go to the next state
 			//Thread.Sleep(3 * 1000); // Sleep for 3 seconds so text can be read
 
 		}   // if
 
-		return valid;
+		//return valid;
 	}   // BuildExpeditionParty()
 }
