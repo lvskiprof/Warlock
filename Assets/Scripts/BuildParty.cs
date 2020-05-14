@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildParty : MonoBehaviour
 {
@@ -26,18 +27,18 @@ public class BuildParty : MonoBehaviour
      *      This method will build your character and the NPCs that make up your expedition party.
     ***/
 
-	//public bool BuildExpeditionParty(GameObject gameObject, char response)
-	public void BuildExpeditionParty(AdventureGame game, char response)
+	public bool BuildExpeditionParty(char response)
 	{
 		const string selected = "You have selected ";
 		const string yourCharacter = " as your character.";
 		bool valid = true;  // Default to true
 		Character PC;
+		AdventureGame game = AdventureGame.Instance;
 
 		switch (response)
 		{
 			case 'M':
-				//game.StoryAreaText(selected + "a Mage" + yourCharacter);
+				game.StoryAreaText(selected + "a Mage" + yourCharacter);
 				PC = new Mage();
 				break;
 			case 'F':
@@ -70,6 +71,6 @@ public class BuildParty : MonoBehaviour
 
 		}   // if
 
-		//return valid;
+		return valid;
 	}   // BuildExpeditionParty()
 }

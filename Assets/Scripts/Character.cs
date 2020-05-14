@@ -7,10 +7,14 @@ using UnityEngine;
  *  character classes are derived from this base class.
 ***/
 
-public class Character : MonoBehaviour
+public class Character
 {
 	public const uint minStat = 9;  // This is the lowest a stat can be adjusted  
 	public const uint maxLevel = 30;// This is the max level we allow for characters
+	[SerializeField]
+	public string charClassName;// This is the character name for this character (Mage, Fighter, etc.)
+	[SerializeField]
+	public CharType charClass;	// This is the character value for this character (Mage, Fighter, etc.)
 	[SerializeField]
 	public uint level;          // Level of the character.
 	[SerializeField]
@@ -45,10 +49,57 @@ public class Character : MonoBehaviour
 	public ulong gold;          // Amount of gold the character has
 
 	/***
+	 *		The CharType values are provided to make it easy to have something that works
+	 *	in a switch statement in the code.  The charClassName 
+	***/
+	public enum CharType
+	{
+		mage,					// Mage class character
+		fighter,				// Fighter class character
+		cleric,					// Cleric class character
+		theif,					// Theif class character
+		dwarf,					// Dwarf class character
+		elf						// Elf class character
+	};	// CharType
+	/***
      *      This is the base creator that we need to use to access the public methods in this class.
     ***/
 	public Character()
 	{   //Instance creator
 
 	}   // Characteristics()
-}	// class Character
+
+	/***
+	 *		Return the basic stats about this this character.  The calling function can add
+	 *	any stats that are character class specific.
+	 *		Note: The string does not end with a "\n" in case nothing else is added, but if
+	 *	more will be added it should start with a "\n" to start on a new line.
+	***/
+	public string GetCharacterInfo()
+	{
+		AdventureGame game = AdventureGame.Instance;
+		string stats, actualHitDice;
+
+		if (hitDice.fractionDie == 5 || hitDice.fractionDie == 2)
+			actualHitDice = (hitDice.wholeDice + 1).ToString(); // 1/2 or 2/3 adds a die
+		else
+			actualHitDice = hitDice.wholeDice.ToString();       // 1/3 does not add to hit die count
+
+		game.HeadingText(charClassName + " CharType = " + charClass.ToString());
+		stats = "Level:        " + level + "\n" +
+				"Strength:     " + strength + "\n" +
+				"Intelligence: " + intel + "\n" +
+				"Wisdom:       " + wisdom + "\n" +
+				"Constitution: " + constitution + "\n" +
+				"Dexterity:    " + dex + "\n" +
+				"Agility:      " + agility + "\n" +
+				"Size:         " + size + "\n" +
+				"Hits:         " + hits + "." + halfHits.ToString() +
+								 " (Hits bonus: 0." + bonusHits + "/die) Hit Dice: " +
+								 actualHitDice + "\n" +
+				"Experience:   " + exp + " (Experience bonus: " + expBonus + "%\n" +
+				"Gold:         " + gold +
+				"";     // Leave this as the last line so it is easy to add more info above it
+		return stats;
+	}   // GetCharacterInfo()
+}   // class Character

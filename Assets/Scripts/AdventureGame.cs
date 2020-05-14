@@ -7,60 +7,89 @@ using UnityEngine.UI;
 
 public class AdventureGame : MonoBehaviour
 {
-	[SerializeField] private Text[] textList;
-	[SerializeField] Text textComponent;
-	[SerializeField] Text textAreaComponent;
-	[SerializeField] public State state;
-	State[] nextStates;
+	[SerializeField]
+	private Text[] textList;	// This is a list of all our Text fields at run-time
+	[SerializeField]
+	Text textComponent;			// This is the upper text field, usually used to display information
+	[SerializeField]
+	Text textAreaComponent;		// This is the lower text field, usually use for entering responses
+	[SerializeField]
+	public State state;			// This is our current state
+	[SerializeField]
+	public State savedState;	// This is the state we need to return to after sub states play out
 
-    public Text _TextHeader;
-    public Text _TextBody;
-    public Text _TextStory;
+	State[] nextStates;			// This is here for diagnostics when debugging
 
-    // singleton
-    private static AdventureGame instance;
+	public Text _TextHeader;	// James added this and it displays in the header area
+	public Text _TextBody;		// James added this and it used to display in the lower text area iuntil I broke it
+	public Text _TextStory;		// James added this and is displays in the upper text area
 
-    // Construct
-    private AdventureGame()
-    {
+	/***
+	 *		This is a Singleton value that has the instance of the game stored in it by
+	 *	the Instance method below.  It is stored so we only have the overhead of finding
+	 *	it the first time we ask for it.
+	 *		If you declare a variable like this:
+	 *			AdventureGame game;
+	 *		The declaration will call the public static AdventureGame Instance method and
+	 *	set the object reference to the instance of the game stored here.  You can then
+	 *	use it to reference and public values or mathods and be sure they will be using
+	 *	the actual game instance.
+	 *		Here is some documentation on this:
+	 *			https://answers.unity.com/questions/891380/unity-c-singleton.html
+	***/
+	private static AdventureGame instance;
 
-    }
+	/***
+	 *		Constructor for the class.  Is this really needed?
+	***/
+	private AdventureGame()
+	{
 
-    // Instance
-    public static AdventureGame Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = GameObject.FindObjectOfType(typeof(AdventureGame)) as AdventureGame;
-            return instance;
-        }
-    }
+	}
 
-    private enum textID
+	/***
+	 *		This method populates the private instance reference the first time it is
+	 *	called and 
+	***/
+	public static AdventureGame Instance
+	{
+		get
+		{
+			if (instance == null)
+				instance = GameObject.FindObjectOfType(typeof(AdventureGame)) as AdventureGame;
+
+			return instance;
+		}
+	}
+
+	/***
+	 *		This are indexes to the various text fields, the order of which was found by
+	 *	and error.  It can be eliminated if James can explain how he ties specific Text
+	 *	definitions to the fields in the Unity GUI.
+	***/
+	private enum textID
 	{   // Index values into textComponents[] to get at the different text areas
 		storyText,      // Story text where what is going on is displayed
 		storyAreaText,  // Story area text where questions and responses are displayed
 		headingText     // Header text area
 	};
 
-	///***
- //   *      This is the base creator that we need to use to access the public methods in this class.
- //   ***/
-	//public AdventureGame()
-	//{   //Instance creator
+	/***
+    *      This is the base creator that we need to use to access the public methods in this class.
+    ***//*
+	public AdventureGame()
+	{   //Instance creator
 
-	//}   // AdventureGame()
+	}   // AdventureGame()
 
 	/***
      *      This method will output the string argument to the HeadingText field on the screen.
     ***/
 	public void HeadingText(string text)
 	{
-		//if (text.Length != 0)
-		//	textList[(int)textID.headingText].text = text;
-
-        _TextHeader.text = text;
+		if (text.Length != 0)
+			//textList[(int)textID.headingText].text = text;
+			_TextHeader.text = text;
 	}   // HeadingText()
 
 	/***
@@ -68,26 +97,21 @@ public class AdventureGame : MonoBehaviour
     ***/
 	public void StoryText(string text)
 	{
-        //if (text.Length != 0)
-        //	textList[(int)textID.storyText].text = text;
+		if (text.Length != 0)
+			//textList[(int)textID.storyText].text = text;
+			_TextStory.text = text;
 
-        _TextStory.text = text;
-
-    }   // StoryText()
+	}   // StoryText()
 
 	/***
      *      This method will output the string argument to the StoryAreaText field on the screen.
     ***/
 	public void StoryAreaText(string text)
 	{
-        //if (text.Length != 0)
-        //{
-        //    textList[(int)textID.storyAreaText].text = text;
-        //}
-
-        _TextBody.text = text;
-
-    }   // StoryAreaText()
+		if (text.Length != 0)
+			textList[(int)textID.storyAreaText].text = text;
+			//_TextBody.text = text;
+	}   // StoryAreaText()
 
 	/***
      *      Method to handle processing Action methods.  Some states only have an action and then
@@ -104,17 +128,29 @@ public class AdventureGame : MonoBehaviour
 				validResponse = true;
 				break;
 			case State.stateAction.buildParty:
-                this.gameObject.GetComponent<BuildParty>().BuildExpeditionParty(this, response);
-                StartCoroutine(DeleyForStoryText(true));
-                break;
-			case State.stateAction.buildBadGuys:
+				validResponse = gameObject.GetComponent<BuildParty>().BuildExpeditionParty(response);
+				StartCoroutine(DelayForStoryText(3));
+				DelayForStoryText(3);
+				break;
+			case State.stateAction.displayCharacter:
+				break;
+			case State.stateAction.displayParty:
 				break;
 			case State.stateAction.moveToDungeon:
 				// Yet to be written, but state will be changed to nextStates[0]
 				validResponse = true;
 				break;
+			case State.stateAction.buildSurfaceBadGuys:
+				break;
+			case State.stateAction.buildDungeonBadGuys:
+				break;
+			case State.stateAction.returnToSavedState:
+				state = savedState;
+				savedState = null;
+				break;
 			default:
 				// Handle the case where we have defined an action but not written the code
+				StoryAreaText("Unknown state " + state.action.ToString() + " encountered.");
 				break;
 		}   // switch
 
@@ -132,21 +168,23 @@ public class AdventureGame : MonoBehaviour
 	}
 
 	/***
+	 *		DelayForStoryText() is used to create a delay of <delay> seconds.  Useful if you
+	 *	don't want some test you just displayed to go away before it can be read by the user.
+	***/
+	IEnumerator DelayForStoryText(Int32 delay)
+	{
+		yield return new WaitForSeconds(delay);
+	}   // DelayForStoryText()
+
+	/***
 	 *      Start is called before the first frame update
 	***/
 	void Start()
 	{
 		nextStates = state.nextStates;
-		//nextStates = state.GetNextStates();
-		Debug.Log("nextStates has " + nextStates.Length + " elements in the array");
 		textList = GameObject.FindObjectsOfType<Text>();
 		StoryText(state.GetStateStory());
 		StoryAreaText(state.GetStateStoryArea());
-
-		foreach (var item in nextStates)
-		{   // Display the name of each item that was found
-			Debug.Log("item name: " + item.name);
-		}   // foreach
 	}   // Start()
 
 	/***
@@ -195,8 +233,8 @@ public class AdventureGame : MonoBehaviour
 
 				for (i = 0; !validResponse && i < responses.Length; i++)
 				{   // Check for a valid response or execute action if no response required
-					if (response.ToCharArray()[0] == state.responses[i])
-					{   // We found a valid response, now call any action function
+					if (state.responses[i] == '*' || response.ToCharArray()[0] == state.responses[i])
+					{   // We found a valid response ('*' == any key), now call any action function
 						if (state.action != State.stateAction.defaultAction)
 							validResponse = PerformAction(state, state.responses[i]);
 						else
@@ -221,9 +259,4 @@ public class AdventureGame : MonoBehaviour
 
 		ManageState();
 	}   // Update()
-
-    IEnumerator DeleyForStoryText(bool returnValue)
-    {
-        yield return new WaitForSeconds(3);
-    }
 }   // class AdventureGame

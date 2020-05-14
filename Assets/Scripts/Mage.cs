@@ -23,6 +23,27 @@ public class Mage : Character
 		new uint[] { 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 5, 0, 5,
 					 0, 5, 0, 5, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1};
 	/***
+	 *		This method calls GetCharacterInfo() from the parent Character class and adds
+	 *	items specific to the Mage class.
+	***/
+	public string GetMageInfo()
+	{
+		string fractionSP;
+
+		if (bonusSP == 5)
+			fractionSP = "+0.5";
+		else if (bonusSP == 10)
+			fractionSP = "+1";
+		else
+			fractionSP = "+0;";
+
+		return GetCharacterInfo() + "\n" +
+			   "Spell points: " + spellPoints + "." + halfSP.ToString() + fractionSP + "SP/die\n" +
+			   "Magic class:: " + magicClass + "\n" +
+			   "";
+	}	// GetMageInfo()
+
+	/***
      *      Adjust IQ up to a goal by lowering Wisdom.  This is generally preferred
      *  over reducing Strength, because Strength affects carrying capacity and the
      *  characters fighting ability.
@@ -64,7 +85,8 @@ public class Mage : Character
     ***/
 	public void NewMage()
 	{
-		level = dice.RollDice(1, 20); // Change later to be more of a progression that favors lower levels
+		charClassName = "Mage";
+		charClass = CharType.mage;
 
 		/***
          *      Roll all characteristics that are not required for a Mage first.
@@ -134,6 +156,7 @@ public class Mage : Character
 	{
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewMage();
+		AdventureGame.Instance.StoryText(GetMageInfo());
 	}   // Mage()
 
 	/***
@@ -150,5 +173,6 @@ public class Mage : Character
         ***/
 		level = dice.RollDice(1, 20);
 		NewMage();
+		AdventureGame.Instance.StoryText(GetMageInfo());
 	}   // Mage()
 }	// class Mage

@@ -33,7 +33,7 @@ public class Dice : MonoBehaviour
 		{
 			uint gigo = (uint)Random.Range(1.0f, 10.0f);
 
-			for (uint j = 0; j < gigo; i++)
+			for (uint j = 0; j < gigo; j++)
 			{   // Throw away from 1 to 10 random numbers to ensure true randomness
 				die = (uint)Random.Range(1.0f, 10.0f);
 			}   // for
