@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
+  m_Name: A0.List of all States
+  m_EditorClassIdentifier: 
+  storyText: This is not a state to be executed.  It is simply a convenient place
+    to store a list of all the states we have defined so the code can copy
+  storyAreaText: 
+  action: 0
+  responses: 
+  nextStates:
+  - {fileID: 11400000, guid: 77ba95e16c0e75742868952e50aede8b, type: 2}
+  - {fileID: 11400000, guid: 27974a9647c58ee4181d8dec5add0343, type: 2}
+  - {fileID: 11400000, guid: 94744c6be3ee0c04ea369a915da84e63, type: 2}
+  - {fileID: 11400000, guid: 0159414cb5082b1479d1557950889946, type: 2}
+  - {fileID: 11400000, guid: c31ae10c622c1fb4aa636f6feb739e7f, type: 2}
+  - {fileID: 11400000, guid: b86c61b2aa4ac1f49a88ed4b69d76f65, type: 2}
+  - {fileID: 11400000, guid: 493d874ab8e9ed84691a35232a3c5c3a, type: 2}
+  - {fileID: 11400000, guid: 24d97f55d9e3cfb4498e3037ee0d225d, type: 2}
+  - {fileID: 11400000, guid: 18a605fda6ad23849930c35384c6c145, type: 2}
+  - {fileID: 11400000, guid: 34dc9dfd92e719f45963b62a068e895b, type: 2}
+  - {fileID: 11400000, guid: 05244e7624728f54ead6212ac48e603a, type: 2}
+  - {fileID: 11400000, guid: 31512db51506afb46b2591dfefcf1bb5, type: 2}
+  - {fileID: 11400000, guid: accb028ebe6a9354182c2ce669000338, type: 2}
+  - {fileID: 11400000, guid: 9bfc552ef1d0c5a488df22a4cd3ecd36, type: 2}

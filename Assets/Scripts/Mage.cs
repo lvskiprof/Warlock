@@ -136,7 +136,8 @@ public class Mage : Character
 		else
 			expBonus = 15;  // 15% experience bonus
 
-		magicClass = (uint)Random.Range(1.0f, 6.0f);	// Determine a magic class
+		magicClass = (uint)Random.Range(1.0f, 6.0f);    // Determine a magic class
+		hitDice = new HitDice();
 		hitDice.wholeDice = wholeDice[level];
 		hitDice.fractionDie = fractionalDice[level];
 

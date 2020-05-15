@@ -63,11 +63,9 @@ public class BuildParty : MonoBehaviour
 				break;
 		}   // switch
 
-        
-
         if (valid)
 		{   // Create this character and the rest of the party and go to the next state
-			//Thread.Sleep(3 * 1000); // Sleep for 3 seconds so text can be read
+			game.DelayForStoryText(3); // Sleep for 3 seconds so text can be read
 
 		}   // if
 

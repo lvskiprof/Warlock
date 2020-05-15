@@ -49,7 +49,14 @@ public class AdventureGame : MonoBehaviour
 
 	/***
 	 *		This method populates the private instance reference the first time it is
-	 *	called and 
+	 *	called and can be used like this from any method to get access to methods in the
+	 *	game instance:
+	 *		AdventureGame.Instance.StoryText(GetMageInfo());
+	 *			or
+	 *		AdventureGame game = AdventureGame.Instance;
+	 *		
+	 *		Which one you use depends on if you want to just do a single thing (first case)
+	 *	or call multiple methods from within your current method (second case).
 	***/
 	public static AdventureGame Instance
 	{
@@ -67,12 +74,12 @@ public class AdventureGame : MonoBehaviour
 	 *	and error.  It can be eliminated if James can explain how he ties specific Text
 	 *	definitions to the fields in the Unity GUI.
 	***/
-	private enum textID
+	private enum TextID
 	{   // Index values into textComponents[] to get at the different text areas
 		storyText,      // Story text where what is going on is displayed
 		storyAreaText,  // Story area text where questions and responses are displayed
 		headingText     // Header text area
-	};
+	};	// TextID
 
 	/***
     *      This is the base creator that we need to use to access the public methods in this class.
@@ -109,7 +116,7 @@ public class AdventureGame : MonoBehaviour
 	public void StoryAreaText(string text)
 	{
 		if (text.Length != 0)
-			textList[(int)textID.storyAreaText].text = text;
+			textList[(int)TextID.storyAreaText].text = text;
 			//_TextBody.text = text;
 	}   // StoryAreaText()
 
@@ -171,7 +178,7 @@ public class AdventureGame : MonoBehaviour
 	 *		DelayForStoryText() is used to create a delay of <delay> seconds.  Useful if you
 	 *	don't want some test you just displayed to go away before it can be read by the user.
 	***/
-	IEnumerator DelayForStoryText(Int32 delay)
+	public IEnumerator DelayForStoryText(Int32 delay)
 	{
 		yield return new WaitForSeconds(delay);
 	}   // DelayForStoryText()
@@ -212,7 +219,7 @@ public class AdventureGame : MonoBehaviour
 
 		if (response.Length > 1)
 		{   // Reject anything that is not a single character response
-			textList[(int)textID.storyText].text = pleaseEnter + validResponses;
+			textList[(int)TextID.storyText].text = pleaseEnter + validResponses;
 		}   // if
 		else if (response.Length == 0 && responses.Length != 0)
 		{   // Ignore a length of 0
@@ -247,7 +254,7 @@ public class AdventureGame : MonoBehaviour
 
 			if (!validResponse)
 			{
-				textList[(int)textID.storyText].text = pleaseEnter + validResponses;
+				textList[(int)TextID.storyText].text = pleaseEnter + validResponses;
 			}   // if
 			else
 			{   // Change to the next state and output appropriate text (text areas may be blanked)

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   storyText: 
   storyAreaText: 
-  action: 1
+  action: 0
   responses: 
   nextStates:
-  - {fileID: 11400000, guid: 493d874ab8e9ed84691a35232a3c5c3a, type: 2}
+  - {fileID: 11400000, guid: 94744c6be3ee0c04ea369a915da84e63, type: 2}

@@ -20,16 +20,16 @@ public class State : ScriptableObject
 
 	[TextArea(1, 5)]
 	[SerializeField]
-	public string storyText;	// Text to output in storyText.text
+	public string storyText;	// Text to output in storyText.text if not empty
 	[TextArea(1, 3)]
 	[SerializeField]
-	string storyAreaText;		// Text to output in storyAreaText.text
+	public string storyAreaText;// Text to output in storyAreaText.text if not empty
 	[SerializeField]
-	public stateAction action;	// This is an action method that needs to be run for this State
+	public stateAction action;	// This is an action method that is executed after any text if output
 	[SerializeField]
-	public char[] responses;	// keys to select the next state in nextStates, 0 length if action-only state
+	public char[] responses;	// keys to select the next state in nextStates, 0 length if action-only state or automatically changes to a new state
 	[SerializeField]
-	public State[] nextStates;	// Array of next possible states,
+	public State[] nextStates;	// Array of next possible states, set in Unity GUI
 
 	public string GetStateStory()
 	{
