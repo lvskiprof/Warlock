@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: A5.DisplayCharacter
   m_EditorClassIdentifier: 
   storyText: 
-  storyAreaText: 
+  storyAreaText: 'Enter your next choice (CPD): '
   action: 0
-  responses: 
-  nextStates: []
+  responses: 430050004400
+  nextStates:
+  - {fileID: 11400000}
+  - {fileID: 11400000, guid: c31ae10c622c1fb4aa636f6feb739e7f, type: 2}
+  - {fileID: 11400000, guid: b86c61b2aa4ac1f49a88ed4b69d76f65, type: 2}

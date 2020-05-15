@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dice : MonoBehaviour
+public class Dice
 {
 	/***
      *      Roll numDice dice with numSides sides and return the resulting value.

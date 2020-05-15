@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: A3. Display Party
   m_EditorClassIdentifier: 
   storyText: 
-  storyAreaText: 
+  storyAreaText: 'Enter your choice (CPD): '
   action: 0
-  responses: 
-  nextStates: []
+  responses: 430050004400
+  nextStates:
+  - {fileID: 11400000, guid: 0159414cb5082b1479d1557950889946, type: 2}
+  - {fileID: 11400000}
+  - {fileID: 11400000, guid: b86c61b2aa4ac1f49a88ed4b69d76f65, type: 2}

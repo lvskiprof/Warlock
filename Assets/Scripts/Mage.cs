@@ -11,10 +11,9 @@ public class Mage : Character
 	[SerializeField]
 	public uint bonusSP;    // Set to bonus SP per die * 10 (value of 0, 5, or 10)
 	[SerializeField]
-	MagicSpells[,] spells = new MagicSpells[maxLevel + 1, 8]; // Need to define this class
+	public MagicSpells[,] spells = new MagicSpells[maxLevel + 1, 8]; // Need to define this class
 	[SerializeField]
-	uint magicClass;
-	HitDice[] hitDicePerLevel = new HitDice[maxLevel + 1];  // Levels 1 to maxLevel
+	public uint magicClass;
 	Dice dice = new Dice(); // Always have a Dice object for rolling dice
 	static readonly uint[] wholeDice =
 		new uint[] {0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 10, 11, 11,
@@ -48,7 +47,7 @@ public class Mage : Character
      *  over reducing Strength, because Strength affects carrying capacity and the
      *  characters fighting ability.
     ***/
-	void RaiseIQfromWisdom(uint goal)
+	public void RaiseIQfromWisdom(uint goal)
 	{
 		while (intel < goal)
 		{   // Get as close as we can to the goal by lowering Wisdom
@@ -65,7 +64,7 @@ public class Mage : Character
 	/***
      *      Adjust IQ up to Min by lowering Strength.
     ***/
-	void RaiseIQfromStrength(uint goal)
+	public void RaiseIQfromStrength(uint goal)
 	{
 		while (intel < goal)
 		{   // Get as close as we can to the goal by lowering Strength
@@ -89,16 +88,6 @@ public class Mage : Character
 		charClass = CharType.mage;
 
 		/***
-         *      Roll all characteristics that are not required for a Mage first.
-        ***/
-		strength = dice.RollDice(3, 6);
-		wisdom = dice.RollDice(3, 6);
-		constitution = dice.RollDice(3, 6);
-		dex = dice.RollDice(3, 6);
-		agility = dice.RollDice(3, 6);
-		size = dice.RollDice(3, 6);
-
-		/***
          *      Now we need to generate the Intelligence (IQ) characteristic, which
          *  has a minimum requirement for a Mage of 9.  A Mage can adjust the IQ
          *  up by one for each reduction of strength by 2 and Wisdom by 3, but you
@@ -112,8 +101,10 @@ public class Mage : Character
          *  and 19 gets 15%, so those are other good points to try and raise IQ to.
         ***/
 
-		while ((intel = dice.RollDice(3, 6)) < 9)
-			;   // Continue generating the IQ for this Mage until it is at least 9
+		while (intel < 9)
+		{   // Regenerate the IQ for this Mage if it is less than 9
+			intel = dice.RollDice(3, 6);
+		}	// while
 
 		if (intel < 16)
 		{   // Try to adjust IQ for the best SP per hit die
@@ -128,7 +119,10 @@ public class Mage : Character
 		}   // if
 
 		if (intel < 13)
+		{   // We can set two bonus values for this
 			expBonus = 0;   // No experience bonus
+			bonusSP = 0;	// No SP bonus
+		}	// if
 		else if (intel < 15)
 			expBonus = 5;   // 5% experience bonus
 		else if (intel < 19)
@@ -136,10 +130,18 @@ public class Mage : Character
 		else
 			expBonus = 15;  // 15% experience bonus
 
+		if (intel >= 13 && intel < 16)
+			bonusSP = 5;    // You get 0.5 SP per whole hit die
+		else if (intel >= 16)
+			bonusSP = 10;	// You get 1.0 SP per whole hit die
+
 		magicClass = (uint)Random.Range(1.0f, 6.0f);    // Determine a magic class
-		hitDice = new HitDice();
-		hitDice.wholeDice = wholeDice[level];
-		hitDice.fractionDie = fractionalDice[level];
+
+		SetHitDice(wholeDice, fractionalDice);
+		RollHits();
+		spellPoints = hits + ((hitDice[level].wholeDice * bonusSP) / 10);
+		if (bonusSP == 5 && (hitDice[level].wholeDice & 1) == 1)
+			halfSP = 5;	// For odd whole hit dice this character gets a 1/2 SP
 
 		/***
 		 *		After this you need to determine what spells the character knows

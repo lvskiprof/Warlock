@@ -16,13 +16,38 @@ public class AdventureGame : MonoBehaviour
 	[SerializeField]
 	public State state;			// This is our current state
 	[SerializeField]
-	public State savedState;	// This is the state we need to return to after sub states play out
+	public State savedState;    // This is the state we need to return to after sub states play out
 
 	State[] nextStates;			// This is here for diagnostics when debugging
 
 	public Text _TextHeader;	// James added this and it displays in the header area
 	public Text _TextBody;		// James added this and it used to display in the lower text area iuntil I broke it
-	public Text _TextStory;		// James added this and is displays in the upper text area
+	public Text _TextStory;     // James added this and is displays in the upper text area
+
+	/***
+	 *		That is a state object that is used to contain a list of all possible states for the game.
+	 *	The enum that follows is used to index into the nextStates array using the same name as the
+	 *	State object in the Unity GUI.
+	***/
+	[SerializeField]
+	public State allStates;     // This is a list of all states so the program can copy one into state
+	public enum StateNames
+	{
+		a1_ExplainGame,
+		a2_BuildParty,
+		a3_PartyBuilt,
+		a4_DisplayCharacter,
+		a5_DisplayParty,
+		a6_TravelToDungeon,
+		a7_DungeonEntrance,
+		a8_Room_1_FromEntrance,
+		a9_Room_2_FromEntrance,
+		a10_Room_1_FromRoom_2,
+		a11_Room_2_FromRoom_1,
+		a12_SurfaceEncounter,
+		a13_DungeonEncounter,
+		a14_ReturnToSavedState
+	};
 
 	/***
 	 *		This is a Singleton value that has the instance of the game stored in it by
@@ -45,7 +70,7 @@ public class AdventureGame : MonoBehaviour
 	private AdventureGame()
 	{
 
-	}
+	}	// AdventureGame()
 
 	/***
 	 *		This method populates the private instance reference the first time it is
@@ -66,8 +91,8 @@ public class AdventureGame : MonoBehaviour
 				instance = GameObject.FindObjectOfType(typeof(AdventureGame)) as AdventureGame;
 
 			return instance;
-		}
-	}
+		}	// get
+	}	// AdventureGame Instance
 
 	/***
 	 *		This are indexes to the various text fields, the order of which was found by
@@ -135,7 +160,7 @@ public class AdventureGame : MonoBehaviour
 				validResponse = true;
 				break;
 			case State.stateAction.buildParty:
-				validResponse = gameObject.GetComponent<BuildParty>().BuildExpeditionParty(response);
+				validResponse = BuildParty.Instance.BuildExpeditionParty(response);
 				StartCoroutine(DelayForStoryText(3));
 				DelayForStoryText(3);
 				break;

@@ -7,6 +7,11 @@ MonoImporter:
   - textComponent: {instanceID: 0}
   - textAreaComponent: {instanceID: 0}
   - state: {fileID: 11400000, guid: 77ba95e16c0e75742868952e50aede8b, type: 2}
+  - savedState: {instanceID: 0}
+  - allStates: {fileID: 11400000, guid: f0596da7a4c7a0d4886f73e7d87c32f1, type: 2}
+  - _TextHeader: {instanceID: 0}
+  - _TextBody: {instanceID: 0}
+  - _TextStory: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
