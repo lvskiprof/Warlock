@@ -8,9 +8,11 @@ using UnityEngine.UI;
 public class AdventureGame : MonoBehaviour
 {
 	[SerializeField]
-	private Text[] textList;	// This is a list of all our Text fields at run-time
+	private Text[] textList;    // This is a list of all our Text fields at run-time
+	[TextArea(1, 8)]	// Define the size of this text field
 	[SerializeField]
-	Text textComponent;			// This is the upper text field, usually used to display information
+	Text textComponent;         // This is the upper text field, usually used to display information
+	[TextArea(1, 5)]    // Define the size of this text field
 	[SerializeField]
 	Text textAreaComponent;		// This is the lower text field, usually use for entering responses
 	[SerializeField]
@@ -18,11 +20,25 @@ public class AdventureGame : MonoBehaviour
 	[SerializeField]
 	public State savedState;    // This is the state we need to return to after sub states play out
 
-	State[] nextStates;			// This is here for diagnostics when debugging
+	State[] nextStates;         // This is here for diagnostics when debugging
 
-	public Text _TextHeader;	// James added this and it displays in the header area
-	public Text _TextBody;		// James added this and it used to display in the lower text area iuntil I broke it
+	public Text _TextHeader;    // James added this and it displays in the header area
+	[TextArea(1, 8)]    // Define the size of this text field
 	public Text _TextStory;     // James added this and is displays in the upper text area
+	[TextArea(1, 5)]    // Define the size of this text field
+	public Text _TextBody;		// James added this and it used to display in the lower text area until I broke it
+
+	/***
+	 *		This are indexes to the various text fields, the order of which was found by
+	 *	and error.  It can be eliminated if James can explain how he ties specific Text
+	 *	definitions to the fields in the Unity GUI.
+	***/
+	private enum TextID
+	{   // Index values into textComponents[] to get at the different text areas
+		storyText,      // Story text where what is going on is displayed
+		storyAreaText,  // Story area text where questions and responses are displayed
+		headingText     // Header text area
+	};  // TextID
 
 	/***
 	 *		That is a state object that is used to contain a list of all possible states for the game.
@@ -47,7 +63,7 @@ public class AdventureGame : MonoBehaviour
 		a12_SurfaceEncounter,
 		a13_DungeonEncounter,
 		a14_ReturnToSavedState
-	};
+	};	// enum StateNames
 
 	/***
 	 *		This is a Singleton value that has the instance of the game stored in it by
@@ -93,18 +109,6 @@ public class AdventureGame : MonoBehaviour
 			return instance;
 		}	// get
 	}	// AdventureGame Instance
-
-	/***
-	 *		This are indexes to the various text fields, the order of which was found by
-	 *	and error.  It can be eliminated if James can explain how he ties specific Text
-	 *	definitions to the fields in the Unity GUI.
-	***/
-	private enum TextID
-	{   // Index values into textComponents[] to get at the different text areas
-		storyText,      // Story text where what is going on is displayed
-		storyAreaText,  // Story area text where questions and responses are displayed
-		headingText     // Header text area
-	};	// TextID
 
 	/***
     *      This is the base creator that we need to use to access the public methods in this class.
@@ -153,36 +157,37 @@ public class AdventureGame : MonoBehaviour
 	public bool PerformAction(State state, char response)
 	{
 		bool validResponse = false;
+		State.StateAction action = state.GetAction();
 
-		switch (state.action)
+		switch (action)
 		{
-			case State.stateAction.defaultAction:
+			case State.StateAction.defaultAction:
 				validResponse = true;
 				break;
-			case State.stateAction.buildParty:
+			case State.StateAction.buildParty:
 				validResponse = BuildParty.Instance.BuildExpeditionParty(response);
 				StartCoroutine(DelayForStoryText(3));
 				DelayForStoryText(3);
 				break;
-			case State.stateAction.displayCharacter:
+			case State.StateAction.displayCharacter:
 				break;
-			case State.stateAction.displayParty:
+			case State.StateAction.displayParty:
 				break;
-			case State.stateAction.moveToDungeon:
+			case State.StateAction.moveToDungeon:
 				// Yet to be written, but state will be changed to nextStates[0]
 				validResponse = true;
 				break;
-			case State.stateAction.buildSurfaceBadGuys:
+			case State.StateAction.buildSurfaceBadGuys:
 				break;
-			case State.stateAction.buildDungeonBadGuys:
+			case State.StateAction.buildDungeonBadGuys:
 				break;
-			case State.stateAction.returnToSavedState:
+			case State.StateAction.returnToSavedState:
 				state = savedState;
 				savedState = null;
 				break;
 			default:
 				// Handle the case where we have defined an action but not written the code
-				StoryAreaText("Unknown state " + state.action.ToString() + " encountered.");
+				StoryAreaText("Unknown state " + action.ToString() + " encountered.");
 				break;
 		}   // switch
 
@@ -213,7 +218,7 @@ public class AdventureGame : MonoBehaviour
 	***/
 	void Start()
 	{
-		nextStates = state.nextStates;
+		nextStates = state.GetNextStates();
 		textList = GameObject.FindObjectsOfType<Text>();
 		StoryText(state.GetStateStory());
 		StoryAreaText(state.GetStateStoryArea());
@@ -265,10 +270,10 @@ public class AdventureGame : MonoBehaviour
 
 				for (i = 0; !validResponse && i < responses.Length; i++)
 				{   // Check for a valid response or execute action if no response required
-					if (state.responses[i] == '*' || response.ToCharArray()[0] == state.responses[i])
+					if (responses[i] == '*' || response.ToCharArray()[0] == responses[i])
 					{   // We found a valid response ('*' == any key), now call any action function
-						if (state.action != State.stateAction.defaultAction)
-							validResponse = PerformAction(state, state.responses[i]);
+						if (state.GetAction() != State.StateAction.defaultAction)
+							validResponse = PerformAction(state, responses[i]);
 						else
 							validResponse = true;
 
@@ -283,7 +288,7 @@ public class AdventureGame : MonoBehaviour
 			}   // if
 			else
 			{   // Change to the next state and output appropriate text (text areas may be blanked)
-				state = state.nextStates[i];
+				state = state.GetNextStates()[i];
 				StoryText(state.GetStateStory());
 				StoryAreaText(state.GetStateStoryArea());
 			}   // else

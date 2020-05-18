@@ -5,22 +5,19 @@ using UnityEngine;
 public class Mage : Character
 {
 	[SerializeField]
-	public uint spellPoints;// Whole number of spell points the character has
+	public HitDice spellPoints;	// Whole number of spell points the character has
 	[SerializeField]
-	public uint halfSP;     // Set to 5 totoal spell points has a franction of 1/2
-	[SerializeField]
-	public uint bonusSP;    // Set to bonus SP per die * 10 (value of 0, 5, or 10)
+	public int bonusSP;			// Set to bonus SP per die * 10 (value of 0, 5, or 10)
 	[SerializeField]
 	public MagicSpells[,] spells = new MagicSpells[maxLevel + 1, 8]; // Need to define this class
 	[SerializeField]
 	public uint magicClass;
-	Dice dice = new Dice(); // Always have a Dice object for rolling dice
-	static readonly uint[] wholeDice =
-		new uint[] {0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 10, 11, 11,
-					12,12,13,13,14,14,14,15,15,15,16,16,16,17,17};
-	static readonly uint[] fractionalDice =
-		new uint[] { 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 5, 0, 5,
-					 0, 5, 0, 5, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1};
+	static readonly int[] wholeDice =
+		new int[] {0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 10, 11, 11,
+				  12,12,13,13,14,14,14,15,15,15,16,16,16,17,17};
+	static readonly int[] fractionalDice =
+		new int[] { 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 5, 0, 5,
+					0, 5, 0, 5, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1};
 	/***
 	 *		This method calls GetCharacterInfo() from the parent Character class and adds
 	 *	items specific to the Mage class.
@@ -37,8 +34,9 @@ public class Mage : Character
 			fractionSP = "+0;";
 
 		return GetCharacterInfo() + "\n" +
-			   "Spell points: " + spellPoints + "." + halfSP.ToString() + fractionSP + "SP/die\n" +
-			   "Magic class:: " + magicClass + "\n" +
+			   "Spell points: " + spellPoints.wholeDice + "." + spellPoints.fractionDie.ToString() +
+			   " P bonus: " + fractionSP + "SP/die" +
+			   " Magic class:: " + magicClass + "\n" +
 			   "";
 	}	// GetMageInfo()
 
@@ -136,12 +134,20 @@ public class Mage : Character
 			bonusSP = 10;	// You get 1.0 SP per whole hit die
 
 		magicClass = (uint)Random.Range(1.0f, 6.0f);    // Determine a magic class
-
+		SetGoldAtLevel();
 		SetHitDice(wholeDice, fractionalDice);
 		RollHits();
-		spellPoints = hits + ((hitDice[level].wholeDice * bonusSP) / 10);
+		spellPoints = hits;
+		spellPoints.wholeDice += ((hitDice[level].wholeDice * bonusSP) / 10);
 		if (bonusSP == 5 && (hitDice[level].wholeDice & 1) == 1)
-			halfSP = 5;	// For odd whole hit dice this character gets a 1/2 SP
+		{   // For odd whole hit dice this character gets a 1/2 SP
+			spellPoints.fractionDie += 5;
+			if (spellPoints.fractionDie == 10)
+			{   // We rounded up to a full SP with the 1/2 fractions
+				spellPoints.wholeDice++;
+				spellPoints.fractionDie = 0;
+			}	// if
+		}	// if
 
 		/***
 		 *		After this you need to determine what spells the character knows
@@ -157,6 +163,10 @@ public class Mage : Character
     ***/
 	public Mage(uint minLevel, uint maxLevel)
 	{
+		/***
+		 *      Later on this should probably be a reverse progression up to 20,
+		 *  so lower levels are more common.
+		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewMage();
 		AdventureGame.Instance.StoryText(GetMageInfo());
