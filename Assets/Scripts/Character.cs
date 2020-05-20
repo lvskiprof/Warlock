@@ -28,11 +28,11 @@ public class Character
 	[SerializeField]
 	public double deathMargin;	// Set to the amount of damage over hits the character has before dying
 	[SerializeField]
-	public uint bonusHits;      // Bonus hits per die * 10 (value of 0, 5, or 10)
+	public int bonusHits;      // Bonus hits per die * 10 (value of -10, -5, 0, 5, or 10)
 	[SerializeField]
 	public HitDice[] hitDice = new HitDice[maxLevel + 1];   // Number of hit dice for each level
 	[SerializeField]
-	public uint[] hitDieRolls = new uint[maxLevel + 1];     // Array of hit die rolls
+	public HitDice[] hitDieRolls = new HitDice[maxLevel + 1];	// Array of hit die rolls
 	[SerializeField]
 	public uint strength;       // Strength points
 	[SerializeField]
@@ -126,18 +126,25 @@ public class Character
 		else
 		{   // Set as male and don't adjust weight
 			gender = Gender.male;
-		}	// else
+		}   // else
 
-		if (constitution < 13)
+		if (constitution <= 5)
+			bonusHits = -10;	// Bonus hits of -1 per die
+		else if (constitution <= 9)
+			bonusHits = -5;		// Bonus hits of -1/2 per die
+		else if (constitution < 13)
 			bonusHits = 0;
 		else if (constitution < 16)
-			bonusHits = 5;  // Bonus hits of 1/2 per die
+			bonusHits = 5;		// Bonus hits of 1/2 per die
 		else
-			bonusHits = 10; // Bonus hits of 1 per die (lucky dog!)
+			bonusHits = 10;		// Bonus hits of 1 per die (lucky dog!)
 
 		SetAttackBonus(strength, 0);
 		SetDefenseBonus(agility, 0, 12);	// Default to average speed for now
-		SetAimBonus(dex, 0);				// Default to just dexterity for the aim bonus
+		SetAimBonus(dex, 0);                // Default to just dexterity for the aim bonus
+
+		for (uint i = 0; i <= maxLevel; i++)
+			hitDieRolls[i] = new HitDice();	// Pre-allocate the elements of this array now
 	}   // Characteristics()
 
 	/***
@@ -216,7 +223,7 @@ public class Character
 		AdventureGame game = AdventureGame.Instance;
 		string stats;
 
-		game.HeadingText(charClassName + " CharType = " + charClass.ToString());
+		//game.HeadingText(charClassName + " CharType = " + charClass.ToString());
 		stats = "Level:        " + level + "\n" +
 				"Strength:     " + strength + "\n" +
 				"Intelligence: " + intel + "\n" +
@@ -249,19 +256,59 @@ public class Character
 	public HitDice HitsAtLevel(uint lvl)
 	{
 		HitDice actualHits = new HitDice();
-		int bonusAtLevel = hitDice[lvl].wholeDice * (int)bonusHits;
 
-		actualHits.wholeDice = 0;
+		actualHits.wholeDice = actualHits.fractionDie = 0;
 
 		for (uint i = 1; i <= lvl; i++)
 		{   // Total up all the hits to this level based on what was rolled
-			actualHits.wholeDice += hitDice[lvl].wholeDice;
+			actualHits.wholeDice += hitDieRolls[i].wholeDice;
+			actualHits.fractionDie += hitDieRolls[i].fractionDie;
 		}   // for
 
-		actualHits.wholeDice += bonusAtLevel / 10;  // Add only the full point hits
-		actualHits.fractionDie = bonusAtLevel % 5;  // Set to 5 if there is a half hit bonus
+		actualHits.wholeDice += actualHits.fractionDie / 10;	// Add whole number from fractions
+		actualHits.fractionDie = actualHits.fractionDie % 5;	// Leave any fraction that is left
 		return actualHits;
 	}   // HitsAtLevel(uint lvl)
+
+	/***
+	 *		Since we have to do this in multiple places it is implemented as a method we can call.
+	 *	This is only called in cases where we are rolling hits to complete a full die for the
+	 *	character.  This might be a fractional die going to a full die or it might be a full die.
+	 *	In either case, the complicating factor is if you have to subtract hits due to poor
+	 *	constituion.  In that case you can never have 0 hits for the roll, so we make sure that
+	 *	you get at least 1/2 hit for the roll.
+	***/
+	private HitDice AdjustBVyHitBonus(uint dieRoll)
+	{
+		HitDice adjustedDieRoll = new HitDice();
+		adjustedDieRoll.wholeDice = (int)dieRoll;
+		adjustedDieRoll.fractionDie = 0;
+
+		if (bonusHits != 0)
+		{   // Adjust hits based on rules for bonus hits for constitution - gets complicated
+			if (bonusHits < 0)
+			{   // With negative hits we can't get less than a 1 for the die roll
+				if (bonusHits == -5)
+				{   // Subtract 1/2 hits, which we can always do
+					adjustedDieRoll.wholeDice--;
+					adjustedDieRoll.fractionDie = 5;
+				}   // if
+				else if (adjustedDieRoll.wholeDice > 1)
+				{   // Subtract 1 hit, as long as the rolled value is 2 or higher
+					adjustedDieRoll.wholeDice--;
+				}	// else
+			}   // if
+			else
+			{	// Add hits to the rolled amount
+				if (bonusHits == 5)
+					adjustedDieRoll.fractionDie = bonusHits;	// Add 1/2 hits
+				else
+					adjustedDieRoll.wholeDice++;				// Add 1 hit
+			}   // else
+		}   // if
+
+		return adjustedDieRoll;
+	}   // AdjustBVyHitBonus(int dieRoll)
 
 	/***
 	 *		This will roll any hit dice that have not been rolled for the current level.
@@ -283,48 +330,62 @@ public class Character
 	public void RollHits()
 	{
 		AdventureGame game = AdventureGame.Instance;
-		HitDice totalHits;
+		HitDice diceToRoll = new HitDice();
+		HitDice newHits = new HitDice();
 
 		for (uint i = 1; i <= level; i++)
 		{   // Note that level 0 is always left at 0
-			if (hitDieRolls[i] == 0)
+			if (hitDieRolls[i].wholeDice == 0)
 			{   // We need to roll hits for this level, so get local copies last level and this one
-				HitDice lastLevel = hitDice[level - 1];
-				HitDice thisLevel = hitDice[level];
-				HitDice diceToRoll = new HitDice();
-				uint newHits = 0;
+				HitDice lastLevel = hitDice[i - 1];
+				HitDice thisLevel = hitDice[i];
 
+				newHits.wholeDice = newHits.fractionDie = 0;
 				diceToRoll.wholeDice = thisLevel.wholeDice - lastLevel.wholeDice;
-				diceToRoll.fractionDie = 0;
-				if (lastLevel.fractionDie != 0 && lastLevel.fractionDie != thisLevel.fractionDie)
-				{   // We are going up from a fractional die to a different fraction or whole die
+				diceToRoll.fractionDie = 0;	// Default to this, but may be changed below
+				if (lastLevel.fractionDie != thisLevel.fractionDie)
+				{   // We are going up a fractional die to a different fraction or whole die
 					if (thisLevel.fractionDie == 0)
 					{   // We are going from a fractional die to a whole die, so figure the fraction
 						if (lastLevel.fractionDie == 5)
 							diceToRoll.fractionDie = 3; // We need to roll a 3-sided die for 1/2 die
 						else
 							diceToRoll.fractionDie = 2; // We need to roll a 2-sided die for 1/3 die
-					}   // if
-					else if (thisLevel.fractionDie == 5)
-						diceToRoll.fractionDie = 3;     // We need to roll a 3-sided die for 1/2 die
-					else
-						diceToRoll.fractionDie = 2;  // We need to roll a 2-sided die for 1/3 die
 
-					if (diceToRoll.wholeDice != 0)
-						diceToRoll.wholeDice--; // We are rolling up from a factional to a whole die
+						newHits = AdjustBVyHitBonus(dice.RollDice(1, (uint)diceToRoll.fractionDie));
+						if (diceToRoll.wholeDice != 0)
+							diceToRoll.wholeDice--; // We are rolling up from a factional to a whole
+					}   // if
+					else
+					{   // We don't adjust these hits, because they are only a fraction of a die.
+						if (thisLevel.fractionDie == 5)
+							diceToRoll.fractionDie = 3;	// We need to roll a 3-sided die for 1/2 die
+						else
+							diceToRoll.fractionDie = 2; // We need to roll a 2-sided die for 1/3 die
+
+						newHits.wholeDice += (int)dice.RollDice(1, (uint)diceToRoll.fractionDie);
+					}	// if
 				}   // if
 
 				if (diceToRoll.wholeDice != 0)
 				{   // We have a change in whole dice since the previous level (may be more than 1)
-					newHits += dice.RollDice((uint)diceToRoll.wholeDice, 6);
+					for (int j = 0; j < diceToRoll.wholeDice; j++)
+					{	// Roll each die and adjust it separately
+						HitDice hitsRolled = AdjustBVyHitBonus(dice.RollDice(
+																(uint)diceToRoll.wholeDice, 6));
+						newHits.wholeDice += hitsRolled.wholeDice;
+						newHits.fractionDie += hitsRolled.fractionDie;
+					}	// for j
 				}   // if
 
-				if (diceToRoll.fractionDie != 0)
-				{   // We have a fractional die to roll, so this is either a 2 or 3 for 1/3 or 1/2 die
-					newHits += dice.RollDice(1, (uint)diceToRoll.fractionDie);
-				}   // if
+				if (newHits.fractionDie > 5)
+				{   // It is possible that due to multiple hit die rolls and a bonus of 1/2 this is 10
+					newHits.wholeDice += newHits.fractionDie / 10;	// Add the whole numbers
+					newHits.fractionDie = newHits.fractionDie % 5;	// Remove the whole numbers
+				}	// if
 
-				hitDieRolls[i] = hitDieRolls[i - 1] + newHits;
+				hitDieRolls[i].wholeDice = newHits.wholeDice;
+				hitDieRolls[i].fractionDie = newHits.fractionDie;
 			}   // if
 		}   // for
 
@@ -337,14 +398,41 @@ public class Character
 	 *		This method is called by the specific character classes with arrays that say how
 	 *	many hit dice this character gets for each level.  Be sure the arrays have maxLevel + 1
 	 *	elements in each of them.
-	 *		Note: You must have level set for this character or else no hits will be rolled.
 	***/
 	public void SetHitDice(int[] wholeDice, int[] fractionalDie)
 	{
-		for (uint i = 0; i <= maxLevel; i++)
+		uint maxHitsLevel = maxLevel + 1;
+
+		if (wholeDice.Length != fractionalDie.Length)
+		{   // Catch the error of the two arrays being different sizes
+			maxHitsLevel = (uint)Math.Min(wholeDice.Length, fractionalDie.Length);
+			Debug.LogError("SetHitDices(): wholeDice.Length is " + wholeDice.Length +
+				" and fractionalDie.Length is " + fractionalDie.Length);
+		}	// if
+
+		if (wholeDice.Length > maxLevel + 1)
+		{   // Catch the error of a passed array that is too long
+			maxHitsLevel = maxLevel + 1;	// Force to be the max allowed
+			Debug.LogError("SetHitDices(): wholeHitDice[] was longer than " + 
+				(maxLevel + 1).ToString());
+		}	// if
+
+		if (maxHitsLevel == maxLevel && wholeDice.Length < maxLevel + 1)
+		{   // Catch the error where we were not passed enough data in the arrays
+			maxHitsLevel = (uint)wholeDice.Length;
+			Debug.LogError("SetHitDices(): wholeHitDice[] was shorter than " +
+				(maxLevel + 1).ToString());
+		}   // if
+
+		for (uint i = 0; i < maxHitsLevel; i++)
 		{   // Fill in the hitDice numbers for this character class
-			hitDice[level].wholeDice = wholeDice[level];
-			hitDice[level].fractionDie = fractionalDie[level];
+			if (hitDice[i] == null)
+			{   // Only allocate a HitDie object the first time (should be the only time)
+				hitDice[i] = new HitDice();
+			}	// if
+
+			hitDice[i].wholeDice = wholeDice[i];
+			hitDice[i].fractionDie = fractionalDie[i];
 		}   // for
 
 		RollHits(); // Roll the hits once we know the hit dice.  The level should already be set

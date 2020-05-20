@@ -35,7 +35,7 @@ public class State : ScriptableObject
 	[SerializeField]
 	char[] responses;	// keys to select the next state in nextStates, 0 length if action-only state or automatically changes to a new state
 	[SerializeField]
-	State[] nextStates;	// Array of next possible states, set in Unity GUI
+	State[] nextStates; // Array of next possible states, set in Unity GUI
 
 	/***
 	 *		This will get the string that represents the storyText for this state.
@@ -47,6 +47,15 @@ public class State : ScriptableObject
 	}   // GetStateStory()
 
 	/***
+	 *		This will set the string that represents the storyText for this state.
+	 *	If it is empty nothing will be displayed when this state is entered.
+	***/
+	public void SetStateStory(string text)
+	{
+		this.storyText = text;
+	}   // SetStateStory()
+
+	/***
 	 *		This will get the string that represents the storyAreaText for this state.
 	 *	If it is empty nothing should be displayed.
 	***/
@@ -54,6 +63,16 @@ public class State : ScriptableObject
 	{
 		return this.storyAreaText;
 	}   // GetStateStory()
+
+
+	/***
+	 *		This will set the string that represents the storyText for this state.
+	 *	If it is empty nothing will be displayed when this state is entered.
+	***/
+	public void SetStateStoryArea(string text)
+	{
+		this.storyAreaText = text;
+	}   // SetStateStory()
 
 	/***
 	 *		This will get the array of states to be used based on an entered response.
@@ -76,11 +95,44 @@ public class State : ScriptableObject
 	}   // GetResponses()
 
 	/***
+	 *		This will set the array of states to be used based on an entered response.
+	 *	If no responses are set for this state then it holds what the next state will be
+	 *	when this state has been completed.
+	***/
+	public void SetResponseAndNextStates(char[] responses, State[] states)
+	{
+		if (responses == null || responses.Length == 0)
+		{   // Only allow this if there is a single state
+			if (states.Length != 1)
+			{   // Don't change anything and log that this is invalid (maybe throw exception later)
+				Debug.LogError("SetResponsesAndNextStates() was passed a null argument for " +
+					"responses and states had a length of " + states.Length +
+					" when it should be only a length of 1.");
+				return;
+			}   // if
+			else 
+				responses = new char[0];
+		}   // if
+
+		this.responses = responses;
+		this.nextStates = states;
+	}   // SetResponsesAndNextStates()
+
+	/***
 	 *		This returns the action, if any, for this state.  The action is a Method that
 	 *	will be executed when the state has completed its processing.
 	***/
 	public StateAction GetAction()
 	{
-		return action;
-	}	// GetAction()
-}	// class State
+		return this.action;
+	}   // GetAction()
+
+	/***
+	 *		This returns the action, if any, for this state.  The action is a Method that
+	 *	will be executed when the state has completed its processing.
+	***/
+	public void SetAction(StateAction action)
+	{
+		this.action = action;
+	}   // SetAction()
+}   // class State

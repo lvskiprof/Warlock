@@ -28,6 +28,11 @@ public class Dice
 		uint die;
 		float sidesPlusOne = (float)(numSides + 1);
 
+		if (numDice > 100)
+		{   // Don't allow numDice to be super large due to a math error, as that will take too long
+			Debug.LogError("RollDice(): NumDice was " + numDice);
+			numDice = System.Math.Min(100, numDice);
+		}	// if
 
 		for (uint i = 0; i < numDice; i++)
 		{

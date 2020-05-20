@@ -23,9 +23,9 @@ public class AdventureGame : MonoBehaviour
 	State[] nextStates;         // This is here for diagnostics when debugging
 
 	public Text _TextHeader;    // James added this and it displays in the header area
-	[TextArea(1, 8)]    // Define the size of this text field
+	[TextArea(1, 8)]			// Define the size of this text field
 	public Text _TextStory;     // James added this and is displays in the upper text area
-	[TextArea(1, 5)]    // Define the size of this text field
+	[TextArea(1, 5)]			// Define the size of this text field
 	public Text _TextBody;		// James added this and it used to display in the lower text area until I broke it
 
 	/***
@@ -124,8 +124,8 @@ public class AdventureGame : MonoBehaviour
 	public void HeadingText(string text)
 	{
 		if (text.Length != 0)
-			//textList[(int)textID.headingText].text = text;
-			_TextHeader.text = text;
+			textList[(int)TextID.headingText].text = text;
+			//_TextHeader.text = text;
 	}   // HeadingText()
 
 	/***
@@ -134,8 +134,8 @@ public class AdventureGame : MonoBehaviour
 	public void StoryText(string text)
 	{
 		if (text.Length != 0)
-			//textList[(int)textID.storyText].text = text;
-			_TextStory.text = text;
+			textList[(int)TextID.storyText].text = text;
+			//_TextStory.text = text;
 
 	}   // StoryText()
 

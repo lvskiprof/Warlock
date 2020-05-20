@@ -5,19 +5,25 @@ using UnityEngine;
 public class Mage : Character
 {
 	[SerializeField]
-	public HitDice spellPoints;	// Whole number of spell points the character has
+	public HitDice spellPoints;		// Whole number of spell points the character has
 	[SerializeField]
-	public int bonusSP;			// Set to bonus SP per die * 10 (value of 0, 5, or 10)
+	public double spellPointMargin;	// Spellpoint margin for emergency use
+	[SerializeField]
+	public int bonusSP;				// Set to bonus SP per die * 10 (value of 0, 5, or 10)
 	[SerializeField]
 	public MagicSpells[,] spells = new MagicSpells[maxLevel + 1, 8]; // Need to define this class
 	[SerializeField]
 	public uint magicClass;
 	static readonly int[] wholeDice =
-		new int[] {0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10, 10, 11, 11,
-				  12,12,13,13,14,14,14,15,15,15,16,16,16,17,17};
+				//  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,
+		new int[] { 0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9,10,10,11,11,
+				// 19,20,21,22,23,24,25,26,27,28,29,30
+				   12,12,12,13,13,13,14,14,14,15,15,15};
 	static readonly int[] fractionalDice =
+				//  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,
 		new int[] { 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 5, 0, 5,
-					0, 5, 0, 5, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1};
+				// 19,20,21,22,23,24,25,26,27,28,29,30
+					0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2};
 	/***
 	 *		This method calls GetCharacterInfo() from the parent Character class and adds
 	 *	items specific to the Mage class.
@@ -136,7 +142,7 @@ public class Mage : Character
 		magicClass = (uint)Random.Range(1.0f, 6.0f);    // Determine a magic class
 		SetGoldAtLevel();
 		SetHitDice(wholeDice, fractionalDice);
-		RollHits();
+		spellPointMargin = deathMargin;
 		spellPoints = hits;
 		spellPoints.wholeDice += ((hitDice[level].wholeDice * bonusSP) / 10);
 		if (bonusSP == 5 && (hitDice[level].wholeDice & 1) == 1)
