@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /***
- *		This class defines all the known clerical spells.  Eventually it can have
- *	methods added that will handle the effects, or those might be in derived
- *	classes.  For now we are just defining some of the possible spells for each
- *	possible spell level.  We have no spells past thirteenth (13th) level in Warlock.
+*		This class defines all the known clerical spells.  Eventually it can have
+*	methods added that will handle the effects, or those might be in derived
+*	classes.  For now we are just defining some of the possible spells for each
+*	possible spell level.  We have no spells past thirteenth (13th) level in Warlock.
 ***/
 
 public class ClericalSpells : MonoBehaviour

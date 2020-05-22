@@ -4,10 +4,10 @@ using System.Threading;
 using UnityEngine;
 
 /***
- *		This class defines all the known magic spells.  Eventually it can have
- *	methods added that will handle the effects, or those might be in derived
- *	classes.  For now we are just defining some of the possible spells for each
- *	possible spell level.  We have no spells past eighth (8th) level in Warlock.
+*		This class defines all the known magic spells.  Eventually it can have
+*	methods added that will handle the effects, or those might be in derived
+*	classes.  For now we are just defining some of the possible spells for each
+*	possible spell level.  We have no spells past eighth (8th) level in Warlock.
 ***/
 
 public class MagicSpells
@@ -42,35 +42,35 @@ public class MagicSpells
 	public enum Spells
 	{   // This will be a list of all magic spells, split for ease of reading by level (fill in later)
 		/***
-		 *		First level magic spells
+		*		First level magic spells
 		***/
 		activateWand,
 		/***
-		 *		Second level magic spells
+		*		Second level magic spells
 		***/
 		activateStaff,
 		/***
-		 *		Third level magic spells
+		*		Third level magic spells
 		***/
 		ballLightning,
 		/***
-		 *		Fourth level magic spells
+		*		Fourth level magic spells
 		***/
 		acidResistance,
 		/***
-		 *		Fifth level magic spells
+		*		Fifth level magic spells
 		***/
 		airWalking,
 		/***
-		 *		Sixth level magic spells
+		*		Sixth level magic spells
 		***/
 		acidProtection,
 		/***
-		 *		Seventh level magic spells
+		*		Seventh level magic spells
 		***/
 		activateMagic,
 		/***
-		 *		Eighth level magic spells
+		*		Eighth level magic spells
 		***/
 		activateDetectors
 	};  // enum Spells

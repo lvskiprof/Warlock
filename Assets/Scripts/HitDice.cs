@@ -7,9 +7,9 @@ public class HitDice : EasyFrac
 	public int fractionDie;
 
 	/***
-	 *		When you have a 1/2 or 2/3 hit die the "total" hit dice is considered to be
-	 *	the number of whole dice plus one.  This is used for figuring defense and attack
-	 *	levels as well as certain effects that are hit die level-based.
+	*		When you have a 1/2 or 2/3 hit die the "total" hit dice is considered to be
+	*	the number of whole dice plus one.  This is used for figuring defense and attack
+	*	levels as well as certain effects that are hit die level-based.
 	***/
 	public int TotalHitDice()
 	{

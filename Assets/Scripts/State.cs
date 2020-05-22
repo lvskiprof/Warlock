@@ -6,9 +6,9 @@ using UnityEngine;
 public class State : ScriptableObject
 {
 	/***
-	 *		This is the only public item, other than the Get methods, in this class.
-	 *	It enumerates the various actions so they can be set in the Unity GUI and
-	 *	used in conditional statements to determine the action to perform.
+	*		This is the only public item, other than the Get methods, in this class.
+	*	It enumerates the various actions so they can be set in the Unity GUI and
+	*	used in conditional statements to determine the action to perform.
 	***/
 
 	[SerializeField]
@@ -39,8 +39,8 @@ public class State : ScriptableObject
 	State[] nextStates; // Array of next possible states, set in Unity GUI
 
 	/***
-	 *		This will get the string that represents the storyText for this state.
-	 *	If it is empty nothing should be displayed.
+	*		This will get the string that represents the storyText for this state.
+	*	If it is empty nothing should be displayed.
 	***/
 	public string GetStateStory()
 	{
@@ -48,8 +48,8 @@ public class State : ScriptableObject
 	}   // GetStateStory()
 
 	/***
-	 *		This will set the string that represents the storyText for this state.
-	 *	If it is empty nothing will be displayed when this state is entered.
+	*		This will set the string that represents the storyText for this state.
+	*	If it is empty nothing will be displayed when this state is entered.
 	***/
 	public void SetStateStory(string text)
 	{
@@ -57,8 +57,8 @@ public class State : ScriptableObject
 	}   // SetStateStory()
 
 	/***
-	 *		This will get the string that represents the storyAreaText for this state.
-	 *	If it is empty nothing should be displayed.
+	*		This will get the string that represents the storyAreaText for this state.
+	*	If it is empty nothing should be displayed.
 	***/
 	public string GetStateStoryArea()
 	{
@@ -67,8 +67,8 @@ public class State : ScriptableObject
 
 
 	/***
-	 *		This will set the string that represents the storyText for this state.
-	 *	If it is empty nothing will be displayed when this state is entered.
+	*		This will set the string that represents the storyText for this state.
+	*	If it is empty nothing will be displayed when this state is entered.
 	***/
 	public void SetStateStoryArea(string text)
 	{
@@ -76,9 +76,9 @@ public class State : ScriptableObject
 	}   // SetStateStory()
 
 	/***
-	 *		This will get the array of states to be used based on an entered response.
-	 *	If no responses are set for this state then it holds what the next state will be
-	 *	when this state has been completed.
+	*		This will get the array of states to be used based on an entered response.
+	*	If no responses are set for this state then it holds what the next state will be
+	*	when this state has been completed.
 	***/
 	public State[] GetNextStates()
 	{
@@ -86,9 +86,9 @@ public class State : ScriptableObject
 	}   // GetNextStates()
 
 	/***
-	 *		This returns the array of response characters.  It may be a length of 0, but
-	 *	if it is not then the array of nextStates should have the same length and each
-	 *	response character will match a corresponding state in this array.
+	*		This returns the array of response characters.  It may be a length of 0, but
+	*	if it is not then the array of nextStates should have the same length and each
+	*	response character will match a corresponding state in this array.
 	***/
 	public char[] GetResponses()
 	{
@@ -96,9 +96,9 @@ public class State : ScriptableObject
 	}   // GetResponses()
 
 	/***
-	 *		This will set the array of states to be used based on an entered response.
-	 *	If no responses are set for this state then it holds what the next state will be
-	 *	when this state has been completed.
+	*		This will set the array of states to be used based on an entered response.
+	*	If no responses are set for this state then it holds what the next state will be
+	*	when this state has been completed.
 	***/
 	public void SetResponseAndNextStates(char[] responses, State[] states)
 	{
@@ -120,8 +120,8 @@ public class State : ScriptableObject
 	}   // SetResponsesAndNextStates()
 
 	/***
-	 *		This returns the action, if any, for this state.  The action is a Method that
-	 *	will be executed when the state has completed its processing.
+	*		This returns the action, if any, for this state.  The action is a Method that
+	*	will be executed when the state has completed its processing.
 	***/
 	public StateAction GetAction()
 	{
@@ -129,8 +129,8 @@ public class State : ScriptableObject
 	}   // GetAction()
 
 	/***
-	 *		This returns the action, if any, for this state.  The action is a Method that
-	 *	will be executed when the state has completed its processing.
+	*		This returns the action, if any, for this state.  The action is a Method that
+	*	will be executed when the state has completed its processing.
 	***/
 	public void SetAction(StateAction action)
 	{

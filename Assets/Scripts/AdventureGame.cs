@@ -31,9 +31,9 @@ public class AdventureGame : MonoBehaviour
 
 
 	/***
-	 *		This are indexes to the various text fields, the order of which was found by
-	 *	and error.  It can be eliminated if James can explain how he ties specific Text
-	 *	definitions to the fields in the Unity GUI.
+	*		This are indexes to the various text fields, the order of which was found by
+	*	and error.  It can be eliminated if James can explain how he ties specific Text
+	*	definitions to the fields in the Unity GUI.
 	***/
 	private enum TextID
 	{   // Index values into textComponents[] to get at the different text areas
@@ -42,9 +42,9 @@ public class AdventureGame : MonoBehaviour
 	};  // TextID
 
 	/***
-	 *		That is a state object that is used to contain a list of all possible states for the game.
-	 *	The enum that follows is used to index into the nextStates array using the same name as the
-	 *	State object in the Unity GUI.
+	*		That is a state object that is used to contain a list of all possible states for the game.
+	*	The enum that follows is used to index into the nextStates array using the same name as the
+	*	State object in the Unity GUI.
 	***/
 	[SerializeField]
 	public State allStates;     // This is a list of all states so the program can copy one into state
@@ -67,22 +67,22 @@ public class AdventureGame : MonoBehaviour
 	};	// enum StateNames
 
 	/***
-	 *		This is a Singleton value that has the instance of the game stored in it by
-	 *	the Instance method below.  It is stored so we only have the overhead of finding
-	 *	it the first time we ask for it.
-	 *		If you declare a variable like this:
-	 *			AdventureGame game;
-	 *		The declaration will call the public static AdventureGame Instance method and
-	 *	set the object reference to the instance of the game stored here.  You can then
-	 *	use it to reference and public values or mathods and be sure they will be using
-	 *	the actual game instance.
-	 *		Here is some documentation on this:
-	 *			https://answers.unity.com/questions/891380/unity-c-singleton.html
+	*		This is a Singleton value that has the instance of the game stored in it by
+	*	the Instance method below.  It is stored so we only have the overhead of finding
+	*	it the first time we ask for it.
+	*		If you declare a variable like this:
+	*			AdventureGame game;
+	*		The declaration will call the public static AdventureGame Instance method and
+	*	set the object reference to the instance of the game stored here.  You can then
+	*	use it to reference and public values or mathods and be sure they will be using
+	*	the actual game instance.
+	*		Here is some documentation on this:
+	*			https://answers.unity.com/questions/891380/unity-c-singleton.html
 	***/
 	private static AdventureGame instance;
 
 	/***
-	 *		Constructor for the class.  Is this really needed?
+	*		Constructor for the class.  Is this really needed?
 	***/
 	private AdventureGame()
 	{
@@ -90,15 +90,15 @@ public class AdventureGame : MonoBehaviour
 	}	// AdventureGame()
 
 	/***
-	 *		This method populates the private instance reference the first time it is
-	 *	called and can be used like this from any method to get access to methods in the
-	 *	game instance:
-	 *		AdventureGame.Instance.StoryText(GetClericInfo());
-	 *			or
-	 *		AdventureGame game = AdventureGame.Instance;
-	 *		
-	 *		Which one you use depends on if you want to just do a single thing (first case)
-	 *	or call multiple methods from within your current method (second case).
+	*		This method populates the private instance reference the first time it is
+	*	called and can be used like this from any method to get access to methods in the
+	*	game instance:
+	*		AdventureGame.Instance.StoryText(GetClericInfo());
+	*			or
+	*		AdventureGame game = AdventureGame.Instance;
+	*		
+	*		Which one you use depends on if you want to just do a single thing (first case)
+	*	or call multiple methods from within your current method (second case).
 	***/
 	public static AdventureGame Instance
 	{
@@ -112,16 +112,16 @@ public class AdventureGame : MonoBehaviour
 	}	// AdventureGame Instance
 
 	/***
-    *      This is the base creator that we need to use to access the public methods in this class.
-    ***//*
+   *       This is the base creator that we need to use to access the public methods in this class.
+   ***//*
 	public AdventureGame()
 	{   //Instance creator
 
 	}   // AdventureGame()
 
 	/***
-     *      This method will output the string argument to the HeadingText field on the screen.
-    ***/
+    *       This method will output the string argument to the HeadingText field on the screen.
+   ***/
 	public void HeadingText(string text)
 	{
 		if (text.Length != 0)
@@ -129,8 +129,8 @@ public class AdventureGame : MonoBehaviour
 	}   // HeadingText()
 
 	/***
-     *      This method will output the string argument to the StoryText field on the screen.
-    ***/
+    *       This method will output the string argument to the StoryText field on the screen.
+   ***/
 	public void StoryText(string text)
 	{
 		if (text.Length != 0)
@@ -141,8 +141,8 @@ public class AdventureGame : MonoBehaviour
 	}   // StoryText()
 
 	/***
-     *      This method will output the string argument to the StoryAreaText field on the screen.
-    ***/
+    *       This method will output the string argument to the StoryAreaText field on the screen.
+   ***/
 	public void StoryAreaText(string text)
 	{
 		if (text.Length != 0)
@@ -152,10 +152,10 @@ public class AdventureGame : MonoBehaviour
 	}   // StoryAreaText()
 
 	/***
-     *      Method to handle processing Action methods.  Some states only have an action and then
-     *  they move on to the next state.  Others require a valid response first before doing the
-     *  action method.  Putting this as a separate method simplifies the code needed to handle actions.
-    ***/
+    *       Method to handle processing Action methods.  Some states only have an action and then
+    *   they move on to the next state.  Others require a valid response first before doing the
+    *   action method.  Putting this as a separate method simplifies the code needed to handle actions.
+   ***/
 	public bool PerformAction(State state, char response)
 	{
 		bool validResponse = false;
@@ -222,18 +222,18 @@ public class AdventureGame : MonoBehaviour
 	}   // PerformAction()
 
 	/***
-     *      Method asked for in the class, but not really used here.  Update() handles managing the
-     *  current state and moving to the next state for now.  So may want to remove this later or
-     *  move the code from Update() into here.
-    ***/
+    *       Method asked for in the class, but not really used here.  Update() handles managing the
+    *   current state and moving to the next state for now.  So may want to remove this later or
+    *   move the code from Update() into here.
+   ***/
 	private void ManageState()
 	{
 		nextStates = state.GetNextStates();
 	}
 
 	/***
-	 *		DelayForStoryText() is used to create a delay of <delay> seconds.  Useful if you
-	 *	don't want some test you just displayed to go away before it can be read by the user.
+	*		DelayForStoryText() is used to create a delay of <delay> seconds.  Useful if you
+	*	don't want some test you just displayed to go away before it can be read by the user.
 	***/
 	public IEnumerator DelayForStoryText(Int32 delay)
 	{
@@ -241,7 +241,7 @@ public class AdventureGame : MonoBehaviour
 	}   // DelayForStoryText()
 
 	/***
-	 *      Start is called before the first frame update
+	*      Start is called before the first frame update
 	***/
 	void Start()
 	{
@@ -252,8 +252,8 @@ public class AdventureGame : MonoBehaviour
 	}   // Start()
 
 	/***
-     *      Update is called once per frame
-    ***/
+    *       Update is called once per frame
+   ***/
 	void Update()
 	{
 		int i;

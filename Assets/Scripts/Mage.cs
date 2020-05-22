@@ -15,8 +15,8 @@ public class Mage : Character
 				// 19,20,21,22,23,24,25,26,27,28,29,30
 					0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2};
 	/***
-	 *		This method calls GetCharacterInfo() from the parent Character class and adds
-	 *	items specific to the Mage class.
+	*		This method calls GetCharacterInfo() from the parent Character class and adds
+	*	items specific to the Mage class.
 	***/
 	public new string GetCharacterInfo()
 	{
@@ -37,8 +37,8 @@ public class Mage : Character
 	}   // GetCharacterInfo()
 
 	/***
-     *      This will create a random character adjusted to be the best Mage
-     *  possible.
+    *       This will create a random character adjusted to be the best Mage
+    *   possible.
     ***/
 	public void NewMage()
 	{
@@ -46,17 +46,17 @@ public class Mage : Character
 		charClass = CharType.mage;
 
 		/***
-         *      Now we need to generate the Intelligence (IQ) characteristic, which
-         *  has a minimum requirement for a Mage of 9.  A Mage can adjust the IQ
-         *  up by one for each reduction of strength by 2 and Wisdom by 3, but you
-         *  can't reduce either characteristic below 9.
-         *  
-         *      It is also beneficial to have an IQ over 13 (plus 1/2 Spell Point
-         *  (SP) per hit die) or 16 (+1 SP per hit die), so adjusting at least to
-         *  either of those values is worth lowering the other two characteristics.
-         *  
-         *      An IQ of 13-14 gets an experience bonus of 5%, while 15-18 gets 10%
-         *  and 19 gets 15%, so those are other good points to try and raise IQ to.
+        *       Now we need to generate the Intelligence (IQ) characteristic, which
+        *   has a minimum requirement for a Mage of 9.  A Mage can adjust the IQ
+        *   up by one for each reduction of strength by 2 and Wisdom by 3, but you
+        *   can't reduce either characteristic below 9.
+        *   
+        *       It is also beneficial to have an IQ over 13 (plus 1/2 Spell Point
+        *   (SP) per hit die) or 16 (+1 SP per hit die), so adjusting at least to
+        *   either of those values is worth lowering the other two characteristics.
+        *   
+        *       An IQ of 13-14 gets an experience bonus of 5%, while 15-18 gets 10%
+        *   and 19 gets 15%, so those are other good points to try and raise IQ to.
         ***/
 
 		while (intel < 9)
@@ -98,8 +98,8 @@ public class Mage : Character
 		SetHitDice(wholeDice, fractionalDice);
 		spellPointMargin = deathMargin;
 		spellPoints = hits;
-		spellPoints.wholeDice += ((hitDice[level].wholeDice * bonusSP) / 10);
-		if (bonusSP == 5 && (hitDice[level].wholeDice & 1) == 1)
+		spellPoints.wholeDice += ((hitDice[level].wholeDice* bonusSP) / 10);
+		if (bonusSP == 5 && (hitDice[level].whole & 1) == 1)
 		{   // For odd whole hit dice this character gets a 1/2 SP
 			spellPoints.fractionDie += 5;
 			if (spellPoints.fractionDie == 10)
@@ -110,22 +110,22 @@ public class Mage : Character
 		}	// if
 
 		/***
-		 *		After this you need to determine what spells the character knows
-		 *	Leaving that for a later time, when I have magic spells working.
+		*		After this you need to determine what spells the character knows
+		*	Leaving that for a later time, when I have magic spells working.
 		***/
 	}   // newMage()
 
 	/***
-     *      This is the base creator that we need to use to access the public
-     *  methods in this class.
-     *      
-     *      This will create a random characterthat is within a level range.
+    *       This is the base creator that we need to use to access the public
+    *   methods in this class.
+    *       
+    *       This will create a random characterthat is within a level range.
     ***/
 	public Mage(uint minLevel, uint maxLevel)
 	{
 		/***
-		 *      Later on this should probably be a reverse progression up to 20,
-		 *  so lower levels are more common.
+		*      Later on this should probably be a reverse progression up to 20,
+		*  so lower levels are more common.
 		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewMage();
@@ -133,16 +133,16 @@ public class Mage : Character
 	}   // Mage(uint minLevel, uint maxLevel)
 
 	/***
-     *      This is the base creator that we need to use to access the public
-     *  methods in this class.
-     *      
-     *      This will create a random character within a range of levels.
+    *       This is the base creator that we need to use to access the public
+    *   methods in this class.
+    *       
+    *       This will create a random character within a range of levels.
     ***/
 	public Mage()
 	{
 		/***
-         *      Later on this should probably be a reverse progression up to 20,
-         *  so lower levels are more common.
+        *       Later on this should probably be a reverse progression up to 20,
+        *   so lower levels are more common.
         ***/
 		level = dice.RollDice(1, 20);
 		NewMage();
@@ -153,7 +153,7 @@ public class Mage : Character
 	*		This will be written out later.  It will handle casting magic spells for the Mage
 	*	character type.  For now just testing using an Interface.
 	***/
-	public override void CastSpell()
+	public override void CastMagicSpell()
 	{
 		;
 	}   // CastSpell()

@@ -8,22 +8,22 @@ public class BuildParty : MonoBehaviour
 {
 
 	/***
-	 *		This is a Singleton value that has the instance of the game stored in it by
-	 *	the Instance method below.  It is stored so we only have the overhead of finding
-	 *	it the first time we ask for it.
-	 *		If you declare a variable like this:
-	 *			AdventureGame game;
-	 *		The declaration will call the public static AdventureGame Instance method and
-	 *	set the object reference to the instance of the game stored here.  You can then
-	 *	use it to reference and public values or mathods and be sure they will be using
-	 *	the actual game instance.
-	 *		Here is some documentation on this:
-	 *			https://answers.unity.com/questions/891380/unity-c-singleton.html
+	*		This is a Singleton value that has the instance of the game stored in it by
+	*	the Instance method below.  It is stored so we only have the overhead of finding
+	*	it the first time we ask for it.
+	*		If you declare a variable like this:
+	*			AdventureGame game;
+	*		The declaration will call the public static AdventureGame Instance method and
+	*	set the object reference to the instance of the game stored here.  You can then
+	*	use it to reference and public values or mathods and be sure they will be using
+	*	the actual game instance.
+	*		Here is some documentation on this:
+	*			https://answers.unity.com/questions/891380/unity-c-singleton.html
 	***/
 	private static BuildParty instance;
 
 	/***
-	 *		Constructor for the class.  Is this really needed???
+	*		Constructor for the class.  Is this really needed???
 	***/
 	private BuildParty()
 	{
@@ -31,15 +31,15 @@ public class BuildParty : MonoBehaviour
 	}   // BuildParty()
 
 	/***
-	 *		This method populates the private instance reference the first time it is
-	 *	called and can be used like this from any method to get access to methods in the
-	 *	game instance:
-	 *		BuildParty.Instance.StoryText(GetClericInfo());
-	 *			or
-	 *		BuildParty buildParty = BuildParty.Instance;
-	 *		
-	 *		Which one you use depends on if you want to just do a single thing (first case)
-	 *	or call multiple methods from within your current method (second case).
+	*		This method populates the private instance reference the first time it is
+	*	called and can be used like this from any method to get access to methods in the
+	*	game instance:
+	*		BuildParty.Instance.StoryText(GetClericInfo());
+	*			or
+	*		BuildParty buildParty = BuildParty.Instance;
+	*		
+	*		Which one you use depends on if you want to just do a single thing (first case)
+	*	or call multiple methods from within your current method (second case).
 	***/
 	public static BuildParty Instance
 	{
@@ -53,8 +53,8 @@ public class BuildParty : MonoBehaviour
 	}	// BuildParty Instance
 
 	/***
-     *      This method will build your character and the NPCs that make up your expedition party.
-    ***/
+    *       This method will build your character and the NPCs that make up your expedition party.
+   ***/
 
 	public bool BuildExpeditionParty(char response)
 	{
