@@ -1,16 +1,31 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+
+/***
+ *      The idea for this interface is to create an interface that will be able to
+ *  handle everything needed for casting magic.  Any character can cast magic, but
+ *  they might be limited to an item if they are not natively a magic user.  So it
+ *  is provided as an interface for the base Character class.
+ *      Mathods will be provided that can handle casting of spells, which includes
+ *  aiming, speed of the casting, and effects on both the caster and the target(s).
+***/
+
+public interface IMagic
+{
+	void CastSpell();
+}   // interface IMagic
 
 /***
  *      This class contains items that are common to all chacacters.  Specific
  *  character classes are derived from this base class.
 ***/
 
-public class Character
+public class Character: IMagic
 {
 	public const uint minStat = 9;  // This is the lowest a stat can be adjusted  
 	public const uint maxLevel = 30;// This is the max level we allow for characters
@@ -30,7 +45,7 @@ public class Character
 	[SerializeField]
 	public int bonusHits;      // Bonus hits per die * 10 (value of -10, -5, 0, 5, or 10)
 	[SerializeField]
-	public HitDice[] hitDice = new HitDice[maxLevel + 1];   // Number of hit dice for each level
+	public EasyFrac[] hitDice = new EasyFrac[maxLevel + 1];   // Number of hit dice for each level
 	[SerializeField]
 	public HitDice[] hitDieRolls = new HitDice[maxLevel + 1];	// Array of hit die rolls
 	[SerializeField]
@@ -67,7 +82,20 @@ public class Character
 	public HitDice damageBonus;	// For this wholeDice is the multipler and fractionalDie is the add
 	[SerializeField]
 	public ulong gold;          // Amount of gold the character has
-	public Dice dice;		    // Used for rolling dice for this character
+	public const uint maxMagicSpellLevel = 8;
+	private Character character = new Character();
+	[SerializeField]
+	public HitDice spellPoints;     // Whole number of spell points the character has
+	[SerializeField]
+	public double spellPointMargin; // Spellpoint margin for emergency use
+	[SerializeField]
+	public int bonusSP;             // Set to bonus SP per die * 10 (value of 0, 5, or 10)
+	[SerializeField]
+	public MagicSpells[,,] spells;  // All indexes will contain arrays of MagicSpells
+	[SerializeField]
+	public uint magicClass;
+	public Dice dice = new Dice();  // Used for rolling dice for this character
+	public Fraction fraction = new Fraction();	// Used to working with fractions
 
 	/***
 	 *		The CharType values are provided to make it easy to have something that works
@@ -78,7 +106,7 @@ public class Character
 		mage,                   // Mage class character
 		fighter,                // Fighter class character
 		cleric,                 // Cleric class character
-		theif,                  // Theif class character
+		thief,                  // Thief class character
 		dwarf,                  // Dwarf class character
 		elf                     // Elf class character
 	};  // CharType
@@ -144,8 +172,47 @@ public class Character
 		SetAimBonus(dex, 0);                // Default to just dexterity for the aim bonus
 
 		for (uint i = 0; i <= maxLevel; i++)
-			hitDieRolls[i] = new HitDice();	// Pre-allocate the elements of this array now
+			hitDieRolls[i] = new HitDice(); // Pre-allocate the elements of this array now
+											//for (uint i = 1; i <= character.maxLevel; i++)
+		
+		spells = new MagicSpells[maxLevel + 1, maxMagicSpellLevel, 2];	// To be filled in later
 	}   // Characteristics()
+
+	/***
+     *      Adjust IQ up to a goal by lowering Wisdom.  This is generally preferred
+     *  over reducing Strength, because Strength affects carrying capacity and the
+     *  characters fighting ability.
+    ***/
+	public void RaiseIQfromWisdom(uint goal)
+	{
+		while (intel < goal)
+		{   // Get as close as we can to the goal by lowering Wisdom
+			if (wisdom < minStat + 3)
+				break;  // We can't adjust Wisdom any lower
+			else
+			{   // Adjust IQ up one point and Wisdom down 3 points
+				intel++;
+				wisdom -= 3;
+			}   // else
+		}   // while
+	}   // raiseIQfromWisdom()
+
+	/***
+     *      Adjust IQ up to Min by lowering Strength.
+    ***/
+	public void RaiseIQfromStrength(uint goal)
+	{
+		while (intel < goal)
+		{   // Get as close as we can to the goal by lowering Strength
+			if (strength < minStat + 2)
+				break;  // We can't adjust Strength any lower
+			else
+			{   // Adjust IQ up one point and Strength down 2 points
+				intel++;
+				strength -= 2;
+			}   // else
+		}   // while
+	}   // raiseIQfromStrength()
 
 	/***
 	 *		This will set the accuracy (aimming) bonus for the character based on the dexterity
@@ -206,7 +273,8 @@ public class Character
 	***/
 	public int ActualHitDice()
 	{
-		if (hitDice[level].fractionDie == 5 || hitDice[level].fractionDie == 2)
+		if (hitDice[level].fractional.fraction == fraction.oneHalf 
+			|| hitDice[level].fractional.fraction == fraction.twoThirds)
 			 return hitDice[level].wholeDice + 1;	// 1/2 or 2/3 adds a die
 		else
 			return hitDice[level].wholeDice;		// 1/3 doesn't add to hit die count
@@ -218,7 +286,7 @@ public class Character
 	 *		Note: The string does not end with a "\n" in case nothing else is added, but if
 	 *	more will be added it should start with a "\n" to start on a new line.
 	***/
-	public string GetCharacterInfo()
+	protected string GetCharacterInfo()
 	{
 		AdventureGame game = AdventureGame.Instance;
 		string stats;
@@ -491,7 +559,7 @@ public class Character
 			case CharType.cleric:           // Cleric class character
 				gold = gold - (gold / 10);  // Clerics always give 10% tithe to the church
 				break;
-			case CharType.theif:            // Theif class character
+			case CharType.thief:            // Thief class character
 				break;
 			case CharType.dwarf:            // Dwarf class character
 				break;
@@ -502,4 +570,13 @@ public class Character
 				break;
 		}   // switch
 	}   // SetGoldAtLevel()
+
+	/***
+	*		This will be written out later.  It will handle casting magic from items for any
+	*	character type.  For now just testing using an Interface.
+	***/
+	public virtual void CastSpell()
+	{
+		;
+	}   // CastSpell()
 }   // class Character

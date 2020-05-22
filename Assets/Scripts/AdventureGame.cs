@@ -2,31 +2,33 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AdventureGame : MonoBehaviour
 {
 	[SerializeField]
+	public TextMeshProUGUI TextHeader;    // James added this and it displays in the header area
+	[SerializeField]
 	private Text[] textList;    // This is a list of all our Text fields at run-time
-	[TextArea(1, 8)]	// Define the size of this text field
+	[TextArea(1, 8)]			// Define the size of this text field
 	[SerializeField]
 	Text textComponent;         // This is the upper text field, usually used to display information
-	[TextArea(1, 5)]    // Define the size of this text field
+	[TextArea(1, 5)]			// Define the size of this text field
 	[SerializeField]
 	Text textAreaComponent;		// This is the lower text field, usually use for entering responses
 	[SerializeField]
 	public State state;			// This is our current state
 	[SerializeField]
 	public State savedState;    // This is the state we need to return to after sub states play out
+	[SerializeField]
+	public Character _PC;       // This is the Player Character for the player
+	[SerializeField]
+	public Character[] _NPCs;   // These are the NonPlayer Characters for the player
 
 	State[] nextStates;         // This is here for diagnostics when debugging
 
-	public Text _TextHeader;    // James added this and it displays in the header area
-	[TextArea(1, 8)]			// Define the size of this text field
-	public Text _TextStory;     // James added this and is displays in the upper text area
-	[TextArea(1, 5)]			// Define the size of this text field
-	public Text _TextBody;		// James added this and it used to display in the lower text area until I broke it
 
 	/***
 	 *		This are indexes to the various text fields, the order of which was found by
@@ -37,7 +39,6 @@ public class AdventureGame : MonoBehaviour
 	{   // Index values into textComponents[] to get at the different text areas
 		storyText,      // Story text where what is going on is displayed
 		storyAreaText,  // Story area text where questions and responses are displayed
-		headingText     // Header text area
 	};  // TextID
 
 	/***
@@ -92,7 +93,7 @@ public class AdventureGame : MonoBehaviour
 	 *		This method populates the private instance reference the first time it is
 	 *	called and can be used like this from any method to get access to methods in the
 	 *	game instance:
-	 *		AdventureGame.Instance.StoryText(GetMageInfo());
+	 *		AdventureGame.Instance.StoryText(GetClericInfo());
 	 *			or
 	 *		AdventureGame game = AdventureGame.Instance;
 	 *		
@@ -124,8 +125,7 @@ public class AdventureGame : MonoBehaviour
 	public void HeadingText(string text)
 	{
 		if (text.Length != 0)
-			textList[(int)TextID.headingText].text = text;
-			//_TextHeader.text = text;
+			TextHeader.text = text;
 	}   // HeadingText()
 
 	/***
@@ -134,7 +134,8 @@ public class AdventureGame : MonoBehaviour
 	public void StoryText(string text)
 	{
 		if (text.Length != 0)
-			textList[(int)TextID.storyText].text = text;
+			textComponent.text = text;
+			//textList[(int)TextID.storyText].text = text;
 			//_TextStory.text = text;
 
 	}   // StoryText()
@@ -145,7 +146,8 @@ public class AdventureGame : MonoBehaviour
 	public void StoryAreaText(string text)
 	{
 		if (text.Length != 0)
-			textList[(int)TextID.storyAreaText].text = text;
+			textAreaComponent.text = text;
+			//textList[(int)TextID.storyAreaText].text = text;
 			//_TextBody.text = text;
 	}   // StoryAreaText()
 
@@ -164,12 +166,37 @@ public class AdventureGame : MonoBehaviour
 			case State.StateAction.defaultAction:
 				validResponse = true;
 				break;
+			case State.StateAction.exitGame:
+				Application.Quit();
+				break;
 			case State.StateAction.buildParty:
 				validResponse = BuildParty.Instance.BuildExpeditionParty(response);
 				StartCoroutine(DelayForStoryText(3));
 				DelayForStoryText(3);
 				break;
 			case State.StateAction.displayCharacter:
+				switch(_PC.charClass)
+				{
+					case Character.CharType.cleric:
+						((Cleric)_PC).GetCharacterInfo();
+						break;
+					case Character.CharType.dwarf:
+						((Dwarf)_PC).GetCharacterInfo();
+						break;
+					case Character.CharType.elf:
+						((Elf)_PC).GetCharacterInfo();
+						break;
+					case Character.CharType.fighter:
+						((Fighter)_PC).GetCharacterInfo();
+						break;
+					case Character.CharType.mage:
+						((Mage)_PC).GetCharacterInfo();
+						break;
+					case Character.CharType.thief:
+						((Thief)_PC).GetCharacterInfo();
+						break;
+				}   // switch
+
 				break;
 			case State.StateAction.displayParty:
 				break;

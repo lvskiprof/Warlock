@@ -10,48 +10,100 @@ using UnityEngine;
  *	possible spell level.  We have no spells past eighth (8th) level in Warlock.
 ***/
 
-public class MagicSpells : MonoBehaviour
+public class MagicSpells
 {
 	[SerializeField]
-	public uint count;  // Number of spells
+	public uint cost;               // Spell point cost of a spell
 	[SerializeField]
-	public enum Level1
-	{   // First level magic spells
-		activateWand
-	};  // Level1
+	public MagicClass magicClass;   // The magic class for this spell
 	[SerializeField]
-	public enum Level2
-	{   // Second level magic spells
-		activateStaff
-	};  // Level2
+	public string spellName;        // Name of the magic spell in text
 	[SerializeField]
-	public enum Level3
-	{   // Third level magic spells
-		ballLightning
-	};  // Level3
+	public Spells spell;            // Enumerated spell name
 	[SerializeField]
-	public enum Level4
-	{   // Fourth level magic spells
-		acidResistance
-	};  // Level4
+	public Shapes shape;            // Shape of the spell
 	[SerializeField]
-	public enum Level5
-	{   // Fifth level magic spells
-		airWalking
-	};  // Level5
+	public uint duration;           // How long the spell lasts (0 means instant)
 	[SerializeField]
-	public enum Level6
-	{   // Sixth level magic spells
-		acidProtection
-	};  // Level6
+	public Interval interval;       // What measure of time to use for duration
 	[SerializeField]
-	public enum Level7
-	{   // Seventh level magic spells
-		activateMagic
-	};  // Level7
+	public bool maintained;         // True if this is a maintained spell
 	[SerializeField]
-	public enum Level8
-	{   // Eighth level magic spells
+	public uint costToMaintain;     // How many spell points per interval to maintain the spell
+	[SerializeField]
+	public Interval intervalPeriod; // The period do you need to expend the maintenance cost
+	[SerializeField]
+	public uint[] affectedAmount = new uint[2]; // Number of dice and number of sides on dice to roll
+	[SerializeField]
+	public uint[] areaSize = new uint[3];   // Length, Width, height/angle
+	[SerializeField]
+	public bool vari;               // True if this is variable sized spell (area size is maximum)
+	[SerializeField]
+	public enum Spells
+	{   // This will be a list of all magic spells, split for ease of reading by level (fill in later)
+		/***
+		 *		First level magic spells
+		***/
+		activateWand,
+		/***
+		 *		Second level magic spells
+		***/
+		activateStaff,
+		/***
+		 *		Third level magic spells
+		***/
+		ballLightning,
+		/***
+		 *		Fourth level magic spells
+		***/
+		acidResistance,
+		/***
+		 *		Fifth level magic spells
+		***/
+		airWalking,
+		/***
+		 *		Sixth level magic spells
+		***/
+		acidProtection,
+		/***
+		 *		Seventh level magic spells
+		***/
+		activateMagic,
+		/***
+		 *		Eighth level magic spells
+		***/
 		activateDetectors
-	};  // Level8
+	};  // enum Spells
+	public enum MagicClass
+	{
+		earth,      // Earth, Body, Inanimate magic
+		fire,       // Fire and destructive magic
+		will,       // Personal will and general 'Magical' effect magic
+		forces,     // Outside forces, spirits, and detection magic
+		cold,       // Cold, water, and life magic
+		air         // Air, electricity, light, and heat magic
+	}   // enum MagicClass
+	public enum Shapes
+	{   // All possible shapes of spells (there are more, but this will do for now)
+		point,          // Microballs and individual spells
+		sixBySix,       // 6"x6" square (Sleep)
+		bolt,           // Standard 6" bolt
+		ball,           // Standard 2" radius ball
+		cone,           // Standard 6" 30-degree cone
+		wall,
+		beam            // Beam shape
+	}   // enum Shapes
+	public enum Interval
+	{   // Time intervals (may want to move this to Character or AdventureGame)
+		phase,          // One Phase = 10 seconds
+		turn            // One Turn = 6 Phases, or one minute
+	}   // enum Interval
+
+	/***
+    *		This is the base creator that we need to use to access the public
+    *	methods in this class.
+    ***/
+	public MagicSpells()
+	{
+	}   // MagicSpells()
 }   // class MagicSpells

@@ -34,7 +34,7 @@ public class BuildParty : MonoBehaviour
 	 *		This method populates the private instance reference the first time it is
 	 *	called and can be used like this from any method to get access to methods in the
 	 *	game instance:
-	 *		BuildParty.Instance.StoryText(GetMageInfo());
+	 *		BuildParty.Instance.StoryText(GetClericInfo());
 	 *			or
 	 *		BuildParty buildParty = BuildParty.Instance;
 	 *		
@@ -61,29 +61,33 @@ public class BuildParty : MonoBehaviour
 		const string selected = "You have selected ";
 		const string yourCharacter = " as your character.";
 		bool valid = true;  // Default to true
-		Character PC;
 		AdventureGame game = AdventureGame.Instance;
 
 		switch (response)
 		{
 			case 'M':
 				game.StoryAreaText(selected + "a Mage" + yourCharacter);
-				PC = new Mage();
+				game._PC = new Mage();
 				break;
 			case 'F':
 				game.StoryAreaText(selected + "a Fighter" + yourCharacter);
+				game._PC = new Fighter();
 				break;
 			case 'C':
 				game.StoryAreaText(selected + "a Cleric" + yourCharacter);
+				game._PC = new Cleric();
 				break;
 			case 'T':
 				game.StoryAreaText(selected + "a Thief" + yourCharacter);
+				game._PC = new Thief();
 				break;
 			case 'D':
 				game.StoryAreaText(selected + "a Dwarf" + yourCharacter);
+				game._PC = new Dwarf();
 				break;
 			case 'E':
 				game.StoryAreaText(selected + "an Elf" + yourCharacter);
+				game._PC = new Elf();
 				break;
 			default:    // Should never be reached, because update handles validating input, but allow for switch not handling all cases the State allows for
 				game.StoryAreaText("You have entered an illegal character.  " +
@@ -100,4 +104,4 @@ public class BuildParty : MonoBehaviour
 
 		return valid;
 	}   // BuildExpeditionParty()
-}
+}	// class BuildParty

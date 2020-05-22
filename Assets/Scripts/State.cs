@@ -15,6 +15,7 @@ public class State : ScriptableObject
 	public enum StateAction
 	{   // These are actions to take when a state is entered.  The key is passed to the Action method
 		defaultAction,		// Default action is to simply change to the indicated State
+		exitGame,			// Used to exit the game by the user
 		moveToDungeon,		// Move the expedition party to the dungeon entrance
 		buildParty,			// This causes the rest of the companions in your party to be created
 		displayCharacter,	// This will display everything about the player character

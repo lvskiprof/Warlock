@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
-  m_Name: A5. Dungeon Entrance
+  m_Name: A7. Dungeon Entrance
   m_EditorClassIdentifier: 
   storyText: Your are at the entrance to the dungeon and there are two doors in front
     of you.  Enter 1 for door #1 and 2 for door #2.

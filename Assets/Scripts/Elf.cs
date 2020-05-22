@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mage : Character
+public class Elf : Character
 {
 	static readonly int[] wholeDice =
 				//  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,
@@ -16,34 +16,22 @@ public class Mage : Character
 					0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2};
 	/***
 	 *		This method calls GetCharacterInfo() from the parent Character class and adds
-	 *	items specific to the Mage class.
+	 *	items specific to the Dwarf class.
 	***/
 	public new string GetCharacterInfo()
 	{
-		string fractionSP;
-
-		if (bonusSP == 5)
-			fractionSP = "+0.5";
-		else if (bonusSP == 10)
-			fractionSP = "+1";
-		else
-			fractionSP = "+0;";
-
 		return base.GetCharacterInfo() + "\n" +
-			   "Spell points: " + spellPoints.wholeDice + "." + spellPoints.fractionDie.ToString() +
-			   " P bonus: " + fractionSP + "SP/die" +
-			   " Magic class:: " + magicClass + "\n" +
 			   "";
 	}   // GetCharacterInfo()
 
 	/***
-     *      This will create a random character adjusted to be the best Mage
+     *      This will create a random character adjusted to be the best Elf
      *  possible.
     ***/
-	public void NewMage()
+	public void NewElf()
 	{
-		charClassName = "Mage";
-		charClass = CharType.mage;
+		charClassName = "Elf";
+		charClass = CharType.elf;
 
 		/***
          *      Now we need to generate the Intelligence (IQ) characteristic, which
@@ -62,7 +50,7 @@ public class Mage : Character
 		while (intel < 9)
 		{   // Regenerate the IQ for this Mage if it is less than 9
 			intel = dice.RollDice(3, 6);
-		}	// while
+		}   // while
 
 		if (intel < 16)
 		{   // Try to adjust IQ for the best SP per hit die
@@ -79,8 +67,7 @@ public class Mage : Character
 		if (intel < 13)
 		{   // We can set two bonus values for this
 			expBonus = 0;   // No experience bonus
-			bonusSP = 0;	// No SP bonus
-		}	// if
+		}   // if
 		else if (intel < 15)
 			expBonus = 5;   // 5% experience bonus
 		else if (intel < 19)
@@ -91,29 +78,17 @@ public class Mage : Character
 		if (intel >= 13 && intel < 16)
 			bonusSP = 5;    // You get 0.5 SP per whole hit die
 		else if (intel >= 16)
-			bonusSP = 10;	// You get 1.0 SP per whole hit die
+			bonusSP = 10;   // You get 1.0 SP per whole hit die
 
 		magicClass = (uint)Random.Range(1.0f, 6.0f);    // Determine a magic class
 		SetGoldAtLevel();
 		SetHitDice(wholeDice, fractionalDice);
-		spellPointMargin = deathMargin;
-		spellPoints = hits;
-		spellPoints.wholeDice += ((hitDice[level].wholeDice * bonusSP) / 10);
-		if (bonusSP == 5 && (hitDice[level].wholeDice & 1) == 1)
-		{   // For odd whole hit dice this character gets a 1/2 SP
-			spellPoints.fractionDie += 5;
-			if (spellPoints.fractionDie == 10)
-			{   // We rounded up to a full SP with the 1/2 fractions
-				spellPoints.wholeDice++;
-				spellPoints.fractionDie = 0;
-			}	// if
-		}	// if
 
 		/***
-		 *		After this you need to determine what spells the character knows
-		 *	Leaving that for a later time, when I have magic spells working.
+		 *		After this you need to determine what abilities the character knows
+		 *	Leaving that for a later time, when I haveabilitiess working.
 		***/
-	}   // newMage()
+	}   // newElf()
 
 	/***
      *      This is the base creator that we need to use to access the public
@@ -121,16 +96,16 @@ public class Mage : Character
      *      
      *      This will create a random characterthat is within a level range.
     ***/
-	public Mage(uint minLevel, uint maxLevel)
+	public Elf(uint minLevel, uint maxLevel)
 	{
 		/***
 		 *      Later on this should probably be a reverse progression up to 20,
 		 *  so lower levels are more common.
 		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
-		NewMage();
+		NewElf();
 		AdventureGame.Instance.StoryText(GetCharacterInfo());
-	}   // Mage(uint minLevel, uint maxLevel)
+	}   // Elf(uint minLevel, uint maxLevel)
 
 	/***
      *      This is the base creator that we need to use to access the public
@@ -138,23 +113,14 @@ public class Mage : Character
      *      
      *      This will create a random character within a range of levels.
     ***/
-	public Mage()
+	public Elf()
 	{
 		/***
          *      Later on this should probably be a reverse progression up to 20,
          *  so lower levels are more common.
         ***/
 		level = dice.RollDice(1, 20);
-		NewMage();
+		NewElf();
 		AdventureGame.Instance.StoryText(GetCharacterInfo());
-	}   // Mage()
-
-	/***
-	*		This will be written out later.  It will handle casting magic spells for the Mage
-	*	character type.  For now just testing using an Interface.
-	***/
-	public override void CastSpell()
-	{
-		;
-	}   // CastSpell()
-}   // class Mage
+	}   // Elf()
+}   // class Elf
