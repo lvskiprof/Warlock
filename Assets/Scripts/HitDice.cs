@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-public class HitDice : EasyFrac
+﻿public class HitDice : EasyFrac
 {
-	public int wholeDice;
-	public int fractionDie;
+	//public int wholeDice;
+	//public int fractionDie;
 
 	/***
 	*		When you have a 1/2 or 2/3 hit die the "total" hit dice is considered to be
@@ -13,9 +10,9 @@ public class HitDice : EasyFrac
 	***/
 	public int TotalHitDice()
 	{
-		if (fractionDie == 5 || fractionDie == 2)
-			return wholeDice + 1;
+		if (fractional.fraction == 5 || fractional.fraction == 2)
+			return whole + 1;
 		else
-			return wholeDice;
+			return whole;
 	}   // TotalHitDice()
 }   // class HitDice

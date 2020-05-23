@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Mage : Character
 {
-	static readonly int[] wholeDice =
+	static readonly int[] whole =
 				//  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,
 		new int[] { 0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9,10,10,11,11,
 				// 19,20,21,22,23,24,25,26,27,28,29,30
@@ -30,7 +30,7 @@ public class Mage : Character
 			fractionSP = "+0;";
 
 		return base.GetCharacterInfo() + "\n" +
-			   "Spell points: " + spellPoints.wholeDice + "." + spellPoints.fractionDie.ToString() +
+			   "Spell points: " + spellPoints.whole + "." + spellPoints.fractional.fraction.ToString() +
 			   " P bonus: " + fractionSP + "SP/die" +
 			   " Magic class:: " + magicClass + "\n" +
 			   "";
@@ -95,17 +95,17 @@ public class Mage : Character
 
 		magicClass = (uint)Random.Range(1.0f, 6.0f);    // Determine a magic class
 		SetGoldAtLevel();
-		SetHitDice(wholeDice, fractionalDice);
+		SetHitDice(whole, fractionalDice);
 		spellPointMargin = deathMargin;
 		spellPoints = hits;
-		spellPoints.wholeDice += ((hitDice[level].wholeDice* bonusSP) / 10);
+		spellPoints.whole += ((hitDice[level].whole* bonusSP) / 10);
 		if (bonusSP == 5 && (hitDice[level].whole & 1) == 1)
 		{   // For odd whole hit dice this character gets a 1/2 SP
-			spellPoints.fractionDie += 5;
-			if (spellPoints.fractionDie == 10)
+			spellPoints.fractional.fraction += 5;
+			if (spellPoints.fractional.fraction == 10)
 			{   // We rounded up to a full SP with the 1/2 fractions
-				spellPoints.wholeDice++;
-				spellPoints.fractionDie = 0;
+				spellPoints.whole++;
+				spellPoints.fractional.fraction = 0;
 			}	// if
 		}	// if
 

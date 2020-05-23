@@ -19,7 +19,8 @@ public class EasyFrac
 	public int whole;			// Whole number portion of the number
 	public Fraction fractional; // Fractional part of the number
 
-    public int fractionDie { get; internal set; }
+	// WTF was this line for?
+    //public int fractionDie { get; internal set; }
 
     /***
 	*		This is a default creator for this class

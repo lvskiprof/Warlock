@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Schema;
-using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 /***
@@ -78,8 +73,8 @@ public class Character: IMagical, IFight, IClerical, IThievish
 	[SerializeField]
 	public uint level;          // Level of the character.
 	[SerializeField]
-	public HitDice hits;		// Number of hits the character can take, with wholeDice being whole
-								// hits and fractionalDice being any half hits (0 for none, 5 for 1/2)
+	public HitDice hits;		// Number of hits the character can take, with whole being whole
+								// hits and fractionalalDice being any half hits (0 for none, 5 for 1/2)
 	[SerializeField]
 	public HitDice hitsTaken;   // Set to the hits the character has taken in damage (like hits)
 	[SerializeField]
@@ -121,7 +116,7 @@ public class Character: IMagical, IFight, IClerical, IThievish
 	[SerializeField]
 	public int aimBonus;        // Archery/Spell casting accuracy bonus
 	[SerializeField]
-	public HitDice damageBonus;	// For this wholeDice is the multipler and fractionalDie is the add
+	public HitDice damageBonus;	// For this whole is the multipler and fractionalDie is the add
 	[SerializeField]
 	public ulong gold;          // Amount of gold the character has
 	public const uint maxMagicSpellLevel = 8;
@@ -488,8 +483,8 @@ public class Character: IMagical, IFight, IClerical, IThievish
 	***/
 	public int ActualHitDice()
 	{
-        if (hitDice[level].fractional.fraction == Fraction.oneHalf
-            || hitDice[level].fractional.fraction == Fraction.twoThirds)
+        if (hitDice[level].fractional.fraction == fraction.oneHalf
+            || hitDice[level].fractional.fraction == fraction.twoThirds)
 			 return hitDice[level].whole + 1;	// 1/2 or 2/3 adds a die
 		else
 			return hitDice[level].whole;		// 1/3 doesn't add to hit die count
@@ -515,7 +510,7 @@ public class Character: IMagical, IFight, IClerical, IThievish
 				"Dexterity:    " + dex + "\n" +
 				"Agility:      " + agility + "\n" +
 				"Size:         " + size + "\n" +
-				"Hits:         " + hits.wholeDice + "." + hits.fractionDie +
+				"Hits:         " + hits.whole + "." + hits.fractional.fraction +
 								 "Death margin: " + deathMargin +
 								 " Hits bonus: " + (((float)bonusHits) / 10.0f) + "/die" +
 								 " Hit Dice: " + ActualHitDice() + "\n" +
@@ -529,27 +524,27 @@ public class Character: IMagical, IFight, IClerical, IThievish
 	*		This method will return the number of hits at the level passed as an argument by
 	*	checking the rolled hits and adding any bonus hits.  It returns a HitDice object so
 	*	the case of a half hit can be shown by setting the fractionalHit value to 5.  You
-	*	would display it as wholeDice + "." fractionalDice.  Fractional hits happen because
+	*	would display it as whole + "." fractionalDice.  Fractional hits happen because
 	*	a character has a constitution that give 1/2 hit per die and they are on an odd
 	*	number ofwhole hit dice.  Being on a 1/2 or 2/3 die does not get the constitution
 	*	bonus added to the hits, only whole dice get the bonus.
-	*		In the character class the wholeDice value represents hits and the fractionDice
+	*		In the character class the whole value represents hits and the fractionDice
 	*	value represents halfHits for the character.
 	***/
 	public HitDice HitsAtLevel(uint lvl)
 	{
 		HitDice actualHits = new HitDice();
 
-		actualHits.wholeDice = actualHits.fractionDie = 0;
+		actualHits.whole = actualHits.fraction.fractional = 0;
 
 		for (uint i = 1; i <= lvl; i++)
 		{   // Total up all the hits to this level based on what was rolled
-			actualHits.wholeDice += hitDieRolls[i].wholeDice;
-			actualHits.fractionDie += hitDieRolls[i].fractionDie;
+			actualHits.whole += hitDieRolls[i].whole;
+			actualHits.fraction.fractional += hitDieRolls[i].fraction.fractional;
 		}   // for
 
-		actualHits.wholeDice += actualHits.fractionDie / 10;	// Add whole number from fractions
-		actualHits.fractionDie = actualHits.fractionDie % 5;	// Leave any fraction that is left
+		actualHits.whole += actualHits.fraction.fractional / 10;	// Add whole number from fractions
+		actualHits.fraction.fractional = actualHits.fraction.fractional % 5;	// Leave any fraction that is left
 		return actualHits;
 	}   // HitsAtLevel(uint lvl)
 
@@ -564,8 +559,8 @@ public class Character: IMagical, IFight, IClerical, IThievish
 	private HitDice AdjustBVyHitBonus(uint dieRoll)
 	{
 		HitDice adjustedDieRoll = new HitDice();
-		adjustedDieRoll.wholeDice = (int)dieRoll;
-		adjustedDieRoll.fractionDie = 0;
+		adjustedDieRoll.whole = (int)dieRoll;
+		adjustedDieRoll.fraction.fractional = 0;
 
 		if (bonusHits != 0)
 		{   // Adjust hits based on rules for bonus hits for constitution - gets complicated
@@ -573,20 +568,20 @@ public class Character: IMagical, IFight, IClerical, IThievish
 			{   // With negative hits we can't get less than a 1 for the die roll
 				if (bonusHits == -5)
 				{   // Subtract 1/2 hits, which we can always do
-					adjustedDieRoll.wholeDice--;
-					adjustedDieRoll.fractionDie = 5;
+					adjustedDieRoll.whole--;
+					adjustedDieRoll.fraction.fractional = 5;
 				}   // if
-				else if (adjustedDieRoll.wholeDice > 1)
+				else if (adjustedDieRoll.whole > 1)
 				{   // Subtract 1 hit, as long as the rolled value is 2 or higher
-					adjustedDieRoll.wholeDice--;
+					adjustedDieRoll.whole--;
 				}	// else
 			}   // if
 			else
 			{	// Add hits to the rolled amount
 				if (bonusHits == 5)
-					adjustedDieRoll.fractionDie = bonusHits;	// Add 1/2 hits
+					adjustedDieRoll.fraction.fractional = bonusHits;	// Add 1/2 hits
 				else
-					adjustedDieRoll.wholeDice++;				// Add 1 hit
+					adjustedDieRoll.whole++;				// Add 1 hit
 			}   // else
 		}   // if
 
@@ -618,62 +613,62 @@ public class Character: IMagical, IFight, IClerical, IThievish
 
 		for (uint i = 1; i <= level; i++)
 		{   // Note that level 0 is always left at 0
-			if (hitDieRolls[i].wholeDice == 0)
+			if (hitDieRolls[i].whole == 0)
 			{   // We need to roll hits for this level, so get local copies last level and this one
 				HitDice lastLevel = (HitDice)hitDice[i - 1];
 				HitDice thisLevel = (HitDice)hitDice[i];
 
-				newHits.wholeDice = newHits.fractionDie = 0;
-				diceToRoll.wholeDice = thisLevel.wholeDice - lastLevel.wholeDice;
-				diceToRoll.fractionDie = 0;	// Default to this, but may be changed below
-				if (lastLevel.fractionDie != thisLevel.fractionDie)
+				newHits.whole = newHits.fraction.fractional = 0;
+				diceToRoll.whole = thisLevel.whole - lastLevel.whole;
+				diceToRoll.fraction.fractional = 0;	// Default to this, but may be changed below
+				if (lastLevel.fraction.fractional != thisLevel.fraction.fractional)
 				{   // We are going up a fractional die to a different fraction or whole die
-					if (thisLevel.fractionDie == 0)
+					if (thisLevel.fraction.fractional == 0)
 					{   // We are going from a fractional die to a whole die, so figure the fraction
-						if (lastLevel.fractionDie == 5)
-							diceToRoll.fractionDie = 3; // We need to roll a 3-sided die for 1/2 die
+						if (lastLevel.fraction.fractional == 5)
+							diceToRoll.fraction.fractional = 3; // We need to roll a 3-sided die for 1/2 die
 						else
-							diceToRoll.fractionDie = 2; // We need to roll a 2-sided die for 1/3 die
+							diceToRoll.fraction.fractional = 2; // We need to roll a 2-sided die for 1/3 die
 
-						newHits = AdjustBVyHitBonus(dice.RollDice(1, (uint)diceToRoll.fractionDie));
-						if (diceToRoll.wholeDice != 0)
-							diceToRoll.wholeDice--; // We are rolling up from a factional to a whole
+						newHits = AdjustBVyHitBonus(dice.RollDice(1, (uint)diceToRoll.fraction.fractional));
+						if (diceToRoll.whole != 0)
+							diceToRoll.whole--; // We are rolling up from a factional to a whole
 					}   // if
 					else
 					{   // We don't adjust these hits, because they are only a fraction of a die.
-						if (thisLevel.fractionDie == 5)
-							diceToRoll.fractionDie = 3;	// We need to roll a 3-sided die for 1/2 die
+						if (thisLevel.fraction.fractional == 5)
+							diceToRoll.fraction.fractional = 3;	// We need to roll a 3-sided die for 1/2 die
 						else
-							diceToRoll.fractionDie = 2; // We need to roll a 2-sided die for 1/3 die
+							diceToRoll.fraction.fractional = 2; // We need to roll a 2-sided die for 1/3 die
 
-						newHits.wholeDice += (int)dice.RollDice(1, (uint)diceToRoll.fractionDie);
+						newHits.whole += (int)dice.RollDice(1, (uint)diceToRoll.fraction.fractional);
 					}	// if
 				}   // if
 
-				if (diceToRoll.wholeDice != 0)
+				if (diceToRoll.whole != 0)
 				{   // We have a change in whole dice since the previous level (may be more than 1)
-					for (int j = 0; j < diceToRoll.wholeDice; j++)
+					for (int j = 0; j < diceToRoll.whole; j++)
 					{	// Roll each die and adjust it separately
 						HitDice hitsRolled = AdjustBVyHitBonus(dice.RollDice(
-																(uint)diceToRoll.wholeDice, 6));
-						newHits.wholeDice += hitsRolled.wholeDice;
-						newHits.fractionDie += hitsRolled.fractionDie;
+																(uint)diceToRoll.whole, 6));
+						newHits.whole += hitsRolled.whole;
+						newHits.fraction.fractional += hitsRolled.fraction.fractional;
 					}	// for j
 				}   // if
 
-				if (newHits.fractionDie > 5)
+				if (newHits.fraction.fractional > 5)
 				{   // It is possible that due to multiple hit die rolls and a bonus of 1/2 this is 10
-					newHits.wholeDice += newHits.fractionDie / 10;	// Add the whole numbers
-					newHits.fractionDie = newHits.fractionDie % 5;	// Remove the whole numbers
+					newHits.whole += newHits.fraction.fractional / 10;	// Add the whole numbers
+					newHits.fraction.fractional = newHits.fraction.fractional % 5;	// Remove the whole numbers
 				}	// if
 
-				hitDieRolls[i].wholeDice = newHits.wholeDice;
-				hitDieRolls[i].fractionDie = newHits.fractionDie;
+				hitDieRolls[i].whole = newHits.whole;
+				hitDieRolls[i].fraction.fractional = newHits.fraction.fractional;
 			}   // if
 		}   // for
 
 		hits = HitsAtLevel(level);
-		deathMargin = ( ((double)hits.wholeDice + ((double)hits.fractionDie) / 10) )*
+		deathMargin = ( ((double)hits.whole + ((double)hits.fraction.fractional) / 10) )*
 					  ((double)constitution* 0.03d);	// Margin is hits* constitution* 0.03
 }   // RollHits()
 
@@ -682,27 +677,27 @@ public class Character: IMagical, IFight, IClerical, IThievish
 	*	many hit dice this character gets for each level.  Be sure the arrays have maxLevel + 1
 	*	elements in each of them.
 	***/
-	public void SetHitDice(int[] wholeDice, int[] fractionalDie)
+	public void SetHitDice(int[] whole, int[] fractionalDie)
 	{
 		uint maxHitsLevel = maxLevel + 1;
 
-		if (wholeDice.Length != fractionalDie.Length)
+		if (whole.Length != fractionalDie.Length)
 		{   // Catch the error of the two arrays being different sizes
-			maxHitsLevel = (uint)Math.Min(wholeDice.Length, fractionalDie.Length);
-			Debug.LogError("SetHitDices(): wholeDice.Length is " + wholeDice.Length +
+			maxHitsLevel = (uint)Math.Min(whole.Length, fractionalDie.Length);
+			Debug.LogError("SetHitDices(): whole.Length is " + whole.Length +
 				" and fractionalDie.Length is " + fractionalDie.Length);
 		}	// if
 
-		if (wholeDice.Length > maxLevel + 1)
+		if (whole.Length > maxLevel + 1)
 		{   // Catch the error of a passed array that is too long
 			maxHitsLevel = maxLevel + 1;	// Force to be the max allowed
 			Debug.LogError("SetHitDices(): wholeHitDice[] was longer than " + 
 				(maxLevel + 1).ToString());
 		}	// if
 
-		if (maxHitsLevel == maxLevel && wholeDice.Length < maxLevel + 1)
+		if (maxHitsLevel == maxLevel && whole.Length < maxLevel + 1)
 		{   // Catch the error where we were not passed enough data in the arrays
-			maxHitsLevel = (uint)wholeDice.Length;
+			maxHitsLevel = (uint)whole.Length;
 			Debug.LogError("SetHitDices(): wholeHitDice[] was shorter than " +
 				(maxLevel + 1).ToString());
 		}   // if
@@ -714,12 +709,12 @@ public class Character: IMagical, IFight, IClerical, IThievish
 				hitDice[i] = new HitDice();
 			}	// if
 
-			hitDice[i].whole = wholeDice[i];
-			hitDice[i].fractionDie = fractionalDie[i];
+			hitDice[i].whole = whole[i];
+			hitDice[i].fraction.fractional = fractionalDie[i];
 		}   // for
 
 		RollHits(); // Roll the hits once we know the hit dice.  The level should already be set
-	}   // SetHitDice(uint[] wholeDice, uint[] fractionalDice)
+	}   // SetHitDice(uint[] whole, uint[] fractionalDice)
 
 	/***
 	*		This method is called when a character is first created to assign some amount of
