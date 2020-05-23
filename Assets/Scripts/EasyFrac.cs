@@ -19,11 +19,13 @@ public class EasyFrac
 	public int whole;			// Whole number portion of the number
 	public Fraction fractional; // Fractional part of the number
 
-	/***
+    public int fractionDie { get; internal set; }
+
+    /***
 	*		This is a default creator for this class
 	***/
 
-	public EasyFrac()
+    public EasyFrac()
 	{
 		whole = 0;
 		fractional = new Fraction(0);

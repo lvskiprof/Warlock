@@ -488,11 +488,11 @@ public class Character: IMagical, IFight, IClerical, IThievish
 	***/
 	public int ActualHitDice()
 	{
-		if (hitDice[level].fractional.fraction == fraction.oneHalf 
-			|| hitDice[level].fractional.fraction == fraction.twoThirds)
-			 return hitDice[level].wholeDice + 1;	// 1/2 or 2/3 adds a die
+        if (hitDice[level].fractional.fraction == Fraction.oneHalf
+            || hitDice[level].fractional.fraction == Fraction.twoThirds)
+			 return hitDice[level].whole + 1;	// 1/2 or 2/3 adds a die
 		else
-			return hitDice[level].wholeDice;		// 1/3 doesn't add to hit die count
+			return hitDice[level].whole;		// 1/3 doesn't add to hit die count
 	}	// ActualHitDice
 
 	/***
@@ -620,8 +620,8 @@ public class Character: IMagical, IFight, IClerical, IThievish
 		{   // Note that level 0 is always left at 0
 			if (hitDieRolls[i].wholeDice == 0)
 			{   // We need to roll hits for this level, so get local copies last level and this one
-				HitDice lastLevel = hitDice[i - 1];
-				HitDice thisLevel = hitDice[i];
+				HitDice lastLevel = (HitDice)hitDice[i - 1];
+				HitDice thisLevel = (HitDice)hitDice[i];
 
 				newHits.wholeDice = newHits.fractionDie = 0;
 				diceToRoll.wholeDice = thisLevel.wholeDice - lastLevel.wholeDice;
@@ -714,7 +714,7 @@ public class Character: IMagical, IFight, IClerical, IThievish
 				hitDice[i] = new HitDice();
 			}	// if
 
-			hitDice[i].wholeDice = wholeDice[i];
+			hitDice[i].whole = wholeDice[i];
 			hitDice[i].fractionDie = fractionalDie[i];
 		}   // for
 
