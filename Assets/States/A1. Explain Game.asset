@@ -12,13 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A1. Explain Game
   m_EditorClassIdentifier: 
+  description: A1.Explain Game state.  Used to outline the object of the game and
+    have the player choose the character type they want to play in the game.
+  headerText: Warlock Expedition
   storyText: You are about to embark on an expedition with a group of adventurers
     seeking fame and fortune.  The expedition will be to a known dungeon that has
-    not been fully mapped yet.
-  storyAreaText: 'Choose your character type: Mage, Fighter, Cleric, Thief, Dwarf,
-    or Elf (MFCTDE): '
-  action: 2
-  responses: 4d0046004300540044004500
+    not been fully mapped yet.  Your are meeting with other adventurers in town to
+    form up a party for the adventure.  The rest of the party will be NPCs.
+  interactionText: 'Choose the type of Player Character you want :  Cleric, Dwarf,
+    Elf, Fighter, Mage, Thief, or you can Quit.
+
+
+    Enter your selection (CDEFMTQ): '
+  action: 3
+  responses: 43004400450046004d0054005100
   nextStates:
   - {fileID: 11400000, guid: 27974a9647c58ee4181d8dec5add0343, type: 2}
   - {fileID: 11400000, guid: 27974a9647c58ee4181d8dec5add0343, type: 2}
@@ -26,3 +33,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 27974a9647c58ee4181d8dec5add0343, type: 2}
   - {fileID: 11400000, guid: 27974a9647c58ee4181d8dec5add0343, type: 2}
   - {fileID: 11400000, guid: 27974a9647c58ee4181d8dec5add0343, type: 2}
+  - {fileID: 11400000, guid: 46f69f8deac87f14c9b91f0f696da8d8, type: 2}

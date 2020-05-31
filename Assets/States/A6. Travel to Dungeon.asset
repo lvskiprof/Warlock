@@ -12,9 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A6. Travel to Dungeon
   m_EditorClassIdentifier: 
+  description: 'A6.Travel to Dungeon state.  This state will execute the Action routine
+    that will handle travelling on the surface to the dungeon.  If the party encounters
+    something on the way there it will change to the A12.Surface Encounter state,
+    but otherwise it changes into the A7.Dungeon Entrance state.
+
+
+    Note: Surface
+    encounter are not yet implemented, so that never happens.'
+  headerText: Traveling To The Dungeon...
   storyText: 
-  storyAreaText: 
-  action: 1
+  interactionText: 
+  action: 2
   responses: 
   nextStates:
   - {fileID: 11400000, guid: 493d874ab8e9ed84691a35232a3c5c3a, type: 2}

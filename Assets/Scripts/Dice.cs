@@ -22,10 +22,10 @@ public class Dice
     *   
     *       Copyright (C) Michael Robert Riley 1976
    ***/
-	public uint RollDice(uint numDice, uint numSides)
+	public int RollDice(int numDice, int numSides)
 	{
-		uint total = 0;
-		uint die;
+		int total = 0;
+		int die;
 		float sidesPlusOne = (float)(numSides + 1);
 
 		if (numDice > 100)
@@ -34,16 +34,16 @@ public class Dice
 			numDice = System.Math.Min(100, numDice);
 		}   // if
 
-		for (uint i = 0; i < numDice; i++)
+		for (int i = 0; i < numDice; i++)
 		{
-			uint gigo = (uint)Random.Range(1.0f, 10.0f);
+			int gigo = (int)Random.Range(1.0f, 10.0f);	// This can be a constant number if you want
 
-			for (uint j = 0; j < gigo; j++)
+			for (int j = 0; j < gigo; j++)
 			{   // Throw away from 1 to 10 random numbers to ensure true randomness
-				die = (uint)Random.Range(1.0f, 10.0f);
+				die = (int)Random.Range(1.0f, 10.0f);
 			}   // for
 
-			die = (uint)Random.Range(1.0f, sidesPlusOne);
+			die = (int)Random.Range(1.0f, sidesPlusOne);	// Use this value as the die roll
 			total += die;
 		}   // for
 

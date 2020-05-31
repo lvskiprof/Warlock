@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A7. Dungeon Entrance
   m_EditorClassIdentifier: 
+  description: A7.Dungeon Entrance state.  This will present a list of options for
+    what you see when you get to the dungeon.
+  headerText: On The Surface Over The Dungeon
   storyText: Your are at the entrance to the dungeon and there are two doors in front
-    of you.  Enter 1 for door #1 and 2 for door #2.
-  storyAreaText: 'What door do you want to go through? '
+    of you.
+  interactionText: 'Enter a 1 to go through Door 1,  a 2 to go through Door 2, or
+    Q to Quit: '
   action: 0
-  responses: 31003200
+  responses: 310032005100
   nextStates:
   - {fileID: 11400000, guid: 24d97f55d9e3cfb4498e3037ee0d225d, type: 2}
   - {fileID: 11400000, guid: 18a605fda6ad23849930c35384c6c145, type: 2}
+  - {fileID: 11400000, guid: 46f69f8deac87f14c9b91f0f696da8d8, type: 2}

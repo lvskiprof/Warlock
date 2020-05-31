@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A4.DisplayCharacter
   m_EditorClassIdentifier: 
+  description: A4.DisplayCharacter state.  This will display the character that was
+    created for the user and offer the same options as A3.PartyBuilt state did.
+  headerText: 
   storyText: 
-  storyAreaText: 'Enter your next choice (CPD): '
-  action: 0
-  responses: 430050004400
+  interactionText: 
+  action: 4
+  responses: 
   nextStates:
-  - {fileID: 11400000}
-  - {fileID: 11400000, guid: c31ae10c622c1fb4aa636f6feb739e7f, type: 2}
-  - {fileID: 11400000, guid: b86c61b2aa4ac1f49a88ed4b69d76f65, type: 2}
+  - {fileID: 11400000, guid: 94744c6be3ee0c04ea369a915da84e63, type: 2}

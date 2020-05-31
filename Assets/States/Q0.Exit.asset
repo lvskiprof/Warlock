@@ -10,19 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
-  m_Name: A14.Return to Saved State
+  m_Name: Q0.Exit
   m_EditorClassIdentifier: 
-  description: 'A14.Return to Saved State state.  This will return to whatever the
-    previous state was.  It is used to handle events that happen in real time, like
-    the party being bounced.  It doesn''t really do an infiinite loop, because the
-    Next States entry is never used.
-
-
-    Note: Not implemented yet.'
+  description: Q0.Exit state.  This state will cause the game to exit.  Later it
+    might have a way to save information out, like your character info, so it can
+    be used in a later game.
   headerText: 
-  storyText: 
+  storyText: Exiting Warlock Expedition
   interactionText: 
-  action: 8
+  action: 1
   responses: 
   nextStates:
-  - {fileID: 11400000}
+  - {fileID: 11400000, guid: d1ddc6c4ba177d044b793344c5e43dd8, type: 2}

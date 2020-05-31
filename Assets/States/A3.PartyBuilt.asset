@@ -12,13 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A3.PartyBuilt
   m_EditorClassIdentifier: 
-  storyText: Now that you have chosen your character what would you like to do? 
-    Display the stats on your character (C), display the info about the NPCs in your
-    party (P), or travel to the Dungeon (D)?
-  storyAreaText: 'Enter your choice (CPD): '
+  description: A3.PartyBuilt state.  This allows the user to display information
+    on the character we created for them, or the rest of the NPCs that make up the
+    party.  They can also choose to travel to the Dungeon when ready or Quit the
+    game.  Later this may want to allow for letting them choose how to modify and
+    equip the character and even the NPCs.  Choosing the level range for the party
+    would be useful as well so they aren't just random levels
+  headerText: 
+  storyText: 
+  interactionText: 'What option would you like me to do for you?
+
+
+    Display the
+    stats on your character (C), display the stats on the NPCs for the rest of the
+    party (P), travel to the Dungeon (D), or Quit (Q): '
   action: 0
-  responses: 430050004400
+  responses: 4300500044005100
   nextStates:
   - {fileID: 11400000, guid: 0159414cb5082b1479d1557950889946, type: 2}
   - {fileID: 11400000, guid: c31ae10c622c1fb4aa636f6feb739e7f, type: 2}
   - {fileID: 11400000, guid: b86c61b2aa4ac1f49a88ed4b69d76f65, type: 2}
+  - {fileID: 11400000, guid: 46f69f8deac87f14c9b91f0f696da8d8, type: 2}

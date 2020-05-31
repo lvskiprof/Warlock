@@ -6,21 +6,33 @@ public class Elf : Character
 {
 	static readonly int[] wholeDice =
 				//  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,
-		new int[] { 0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9,10,10,11,11,
+		new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 7, 8, 9,10,10,11,11,12,12,13,13,
 				// 19,20,21,22,23,24,25,26,27,28,29,30
-				   12,12,12,13,13,13,14,14,14,15,15,15};
+				   14,14,14,15,15,16,16,16,17,17,18,18};
 	static readonly int[] fractionalDice =
 				//  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,
-		new int[] { 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 5, 0, 5,
+		new int[] { 0, 5, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5,
 				// 19,20,21,22,23,24,25,26,27,28,29,30
-					0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2};
+					0, 1, 2, 0, 5, 0, 1, 2, 0, 5, 0, 1};
 	/***
 	*		This method calls GetCharacterInfo() from the parent Character class and adds
 	*	items specific to the Dwarf class.
 	***/
 	public new string GetCharacterInfo()
 	{
+		string fractionSP;
+
+		if (bonusSP == 5)
+			fractionSP = "+0.5";
+		else if (bonusSP == 10)
+			fractionSP = "+1";
+		else
+			fractionSP = "+0;";
+
 		return base.GetCharacterInfo() + "\n" +
+			   "Spell points: " + spellPoints.whole + "." + spellPoints.fractional.fraction +
+			   " SP bonus:    " + fractionSP + "SP/die" +
+			   " Magic class: " + magicClass + "\n" +
 			   "";
 	}   // GetCharacterInfo()
 
@@ -35,7 +47,7 @@ public class Elf : Character
 	{
 		charClassName = "Elf";
 		charClass = CharType.elf;
-		uint prime;
+		int prime;
 
 		/***
         *       Now we need to generate the Intelligence (IQ) characteristic, which
@@ -142,14 +154,10 @@ public class Elf : Character
 		else
 			expBonus = 15;  // 15% experience bonus
 
-		if (intel >= 13 && intel < 16)
-			bonusSP = 5;    // You get 0.5 SP per whole hit die
-		else if (intel >= 16)
-			bonusSP = 10;   // You get 1.0 SP per whole hit die
-
 		magicClass = dice.RollDice(1, 6);    // Determine a magic class
 		SetGoldAtLevel();
 		SetHitDice(wholeDice, fractionalDice);
+		SetSpellPoints();   // Must follow SetHitDice() so that hit dice have been rolled
 
 		/***
 		*		After this you need to determine what abilities the character knows
@@ -163,7 +171,7 @@ public class Elf : Character
     *       
     *       This will create a random characterthat is within a level range.
     ***/
-	public Elf(uint minLevel, uint maxLevel)
+	public Elf(int minLevel, int maxLevel)
 	{
 		/***
 		*      Later on this should probably be a reverse progression up to 20,
@@ -172,7 +180,7 @@ public class Elf : Character
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewElf();
 		AdventureGame.Instance.StoryText(GetCharacterInfo());
-	}   // Elf(uint minLevel, uint maxLevel)
+	}   // Elf(int minLevel, int maxLevel)
 
 	/***
     *       This is the base creator that we need to use to access the public

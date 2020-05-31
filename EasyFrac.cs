@@ -19,17 +19,21 @@ public class EasyFrac
 	public int whole;			// Whole number portion of the number
 	public Fraction fractional; // Fractional part of the number
 
+	// WTF was this line for?
+    //public int fractionDie { get; internal set; }
+
     /***
 	*		This is a default creator for this class
 	***/
-	    public EasyFrac()
+
+    public EasyFrac()
 	{
 		whole = 0;
 		fractional = new Fraction(0);
 	}   // EasyFrac()
 
 	/***
-	*		This is a creator for this class where you can pass two int values to set the
+	*		This is a creator for this class where you can pass two uint value to set the
 	*	whole number and the fractional part.
 	***/
 
@@ -40,20 +44,11 @@ public class EasyFrac
 	}   // EasyFrac(uint frac)
 
 	/***
-	*		This is an easy way to set the whole number and fraction by passing integers.
-	***/
-
-	public void SetValue(int wholeNumber, int frac)
-	{
-		whole = wholeNumber;
-		fractional.SetValue(frac);
-	}   // SetValue(int wholeNumber, int frac)
-
-	/***
 	*		This overrides the basic Object.ToString() method to implement one that knows how
 	*	to turn the various uint values into a fraction.
 	***/
-		public override string ToString()
+
+	public override string ToString()
 	{
 		return whole.ToString() + " " + fractional.ToString();
 	}   // ToString();

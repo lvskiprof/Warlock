@@ -10,10 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
-  m_Name: A13. Dungeon encounter
+  m_Name: A13. Dungeon Encounter
   m_EditorClassIdentifier: 
+  description: 'A13.Dungeon Encounter state.  This will handle encounters in the
+    Dungeon.  When the encounter is completed it will return to the previous state.
+
+
+    Note: 
+    Not implmented yet.'
+  headerText: Bounced While Inside The Dungeon
   storyText: 
-  storyAreaText: 
-  action: 0
+  interactionText: 
+  action: 6
   responses: 
-  nextStates: []
+  nextStates:
+  - {fileID: 11400000, guid: 9bfc552ef1d0c5a488df22a4cd3ecd36, type: 2}

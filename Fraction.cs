@@ -49,32 +49,24 @@ public class Fraction
 
 	public override string ToString()
 	{
-		string value = "";
-		int absFraction = System.Math.Abs(fraction);
-
-		if (fraction < 0)
-			value = "-";
-
-		switch (absFraction)
+		switch (fraction)
 		{   // Handle all the supported fraction types
-			case 0:
-				return "";
 			case oneSeventySecond:
-				return value + "1/72";
+				return "1/72";
 			case oneSixtieth:
-				return value + "1/60";
+				return "1/60";
 			case oneSixth:
-				return value + "1/6";
+				return "1/6";
 			case oneThird:
-				return value + "1/3";
+				return "1/3";
 			case oneHalf:
-				return value + "1/2";
+				return "1/2";
 			case twoThirds:
-				return value + "2/3";
+				return "2/3";
 			case threeQuarters:
-				return value + "3/4";
+				return "3/4";
 			default:
-				return "?/??";   // Flag this as an unknown fraction
+				return "?/?";   // Flag this as an unknown fraction
 		}   // switch
 	}   // ToString();
 
@@ -130,13 +122,4 @@ public class Fraction
 				return 0.0d;   // Flag this as an unknown fraction
 		}   // switch
 	}   // ToDouble()
-
-	/***
-	*		This is an easy way to set the fraction by passing and integer.
-	***/
-
-	public void SetValue(int frac)
-	{
-		fraction = frac;
-	}   // SetValue(int frac)
 }   // class Fraction

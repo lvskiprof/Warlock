@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A2. Build Party
   m_EditorClassIdentifier: 
+  description: A2.Build Party state. This is simply a placekeeper state that automatically
+    switches to the A3.Party Built state once the Build Party action method finishes.
+  headerText: 
   storyText: 
-  storyAreaText: 
+  interactionText: 
   action: 0
   responses: 
   nextStates:

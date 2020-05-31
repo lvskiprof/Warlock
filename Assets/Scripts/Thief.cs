@@ -6,14 +6,14 @@ public class Thief : Character
 {
 	static readonly int[] wholeDice =
 				//  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,
-		new int[] { 0, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 9, 9,10,10,11,11,
+		new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 8, 9, 9,10,10,11,11,12,12,13,
 				// 19,20,21,22,23,24,25,26,27,28,29,30
-				   12,12,12,13,13,13,14,14,14,15,15,15};
+				   13,14,14,14,15,15,15,16,16,16,17,17};
 	static readonly int[] fractionalDice =
 				//  0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,
-		new int[] { 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 0, 5, 0, 5, 0, 5,
+		new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0,
 				// 19,20,21,22,23,24,25,26,27,28,29,30
-					0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2};
+					5, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1};
 	/***
 	*		This method calls GetCharacterInfo() from the parent Character class and adds
 	*	items specific to the Mage class.
@@ -32,7 +32,7 @@ public class Thief : Character
 	{
 		charClassName = "Thief";
 		charClass = CharType.thief;
-		uint prime;
+		int prime;
 
 		/***
         *       Now we need to generate the Dexterity and Agility characteristics, which
@@ -87,7 +87,7 @@ public class Thief : Character
     *       
     *       This will create a random characterthat is within a level range.
     ***/
-	public Thief(uint minLevel, uint maxLevel)
+	public Thief(int minLevel, int maxLevel)
 	{
 		/***
 		*       Later on this should probably be a reverse progression up to 20,
@@ -96,7 +96,7 @@ public class Thief : Character
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewThief();
 		AdventureGame.Instance.StoryText(GetCharacterInfo());
-	}   // Thief(uint minLevel, uint maxLevel)
+	}   // Thief(int minLevel, int maxLevel)
 
 	/***
     *       This is the base creator that we need to use to access the public

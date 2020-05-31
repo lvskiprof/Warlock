@@ -10,19 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
-  m_Name: A14.Return to Saved State
+  m_Name: Q1.Exited
   m_EditorClassIdentifier: 
-  description: 'A14.Return to Saved State state.  This will return to whatever the
-    previous state was.  It is used to handle events that happen in real time, like
-    the party being bounced.  It doesn''t really do an infiinite loop, because the
-    Next States entry is never used.
-
-
-    Note: Not implemented yet.'
+  description: Q1.Exited state.  This is never reached and is simply a placeholder
+    to have a state for Q0.Exit to switch to
   headerText: 
   storyText: 
   interactionText: 
-  action: 8
+  action: 0
   responses: 
   nextStates:
   - {fileID: 11400000}

@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A0.List of all States
   m_EditorClassIdentifier: 
-  storyText: This is not a state to be executed.  It is simply a convenient place
+  description: This is not a state to be executed.  It is simply a convenient place
     to store a list of all the states we have defined so the code can copy
-  storyAreaText: 
+  headerText: 
+  storyText: 
+  interactionText: 
   action: 0
   responses: 
   nextStates:
@@ -32,3 +34,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 31512db51506afb46b2591dfefcf1bb5, type: 2}
   - {fileID: 11400000, guid: accb028ebe6a9354182c2ce669000338, type: 2}
   - {fileID: 11400000, guid: 9bfc552ef1d0c5a488df22a4cd3ecd36, type: 2}
+  - {fileID: 11400000, guid: 46f69f8deac87f14c9b91f0f696da8d8, type: 2}
+  - {fileID: 11400000, guid: d1ddc6c4ba177d044b793344c5e43dd8, type: 2}

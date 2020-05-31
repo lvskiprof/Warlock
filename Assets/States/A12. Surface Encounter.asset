@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A12. Surface Encounter
   m_EditorClassIdentifier: 
+  description: 'A12. Surface Encounter state.  This will handle encounter on the
+    surface, which can be larger and more varied that what you find in the Dungeon. 
+    When the encounter is completed it will return to the previous state.
+
+
+    Note: 
+    Not implmented yet.'
+  headerText: Bounced While Traveling To The Dungeon
   storyText: 
-  storyAreaText: 
-  action: 0
+  interactionText: 
+  action: 7
   responses: 
-  nextStates: []
+  nextStates:
+  - {fileID: 11400000, guid: 9bfc552ef1d0c5a488df22a4cd3ecd36, type: 2}

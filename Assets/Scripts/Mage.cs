@@ -30,9 +30,9 @@ public class Mage : Character
 			fractionSP = "+0;";
 
 		return base.GetCharacterInfo() + "\n" +
-			   "Spell points: " + spellPoints.whole + "." + spellPoints.fractional.fraction.ToString() +
-			   " P bonus: " + fractionSP + "SP/die" +
-			   " Magic class:: " + magicClass + "\n" +
+			   "Spell points:\t" + spellPoints.whole + "." + spellPoints.fractional.fraction +
+			   "\tSP bonus: " + fractionSP + " SP/die" +
+			   " Magic class:\t" + magicClass + "\n" +
 			   "";
 	}   // GetCharacterInfo()
 
@@ -93,21 +93,10 @@ public class Mage : Character
 		else if (intel >= 16)
 			bonusSP = 10;	// You get 1.0 SP per whole hit die
 
-		magicClass = (uint)Random.Range(1.0f, 6.0f);    // Determine a magic class
+		magicClass = (int)Random.Range(1.0f, 6.0f);    // Determine a magic class
 		SetGoldAtLevel();
 		SetHitDice(whole, fractionalDice);
-		spellPointMargin = deathMargin;
-		spellPoints = hits;
-		spellPoints.whole += ((hitDice[level].whole* bonusSP) / 10);
-		if (bonusSP == 5 && (hitDice[level].whole & 1) == 1)
-		{   // For odd whole hit dice this character gets a 1/2 SP
-			spellPoints.fractional.fraction += 5;
-			if (spellPoints.fractional.fraction == 10)
-			{   // We rounded up to a full SP with the 1/2 fractions
-				spellPoints.whole++;
-				spellPoints.fractional.fraction = 0;
-			}	// if
-		}	// if
+		SetSpellPoints();	// Must follow SetHitDice() so that hit dice have been rolled
 
 		/***
 		*		After this you need to determine what spells the character knows
@@ -121,7 +110,7 @@ public class Mage : Character
     *       
     *       This will create a random characterthat is within a level range.
     ***/
-	public Mage(uint minLevel, uint maxLevel)
+	public Mage(int minLevel, int maxLevel)
 	{
 		/***
 		*      Later on this should probably be a reverse progression up to 20,
@@ -129,7 +118,6 @@ public class Mage : Character
 		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewMage();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Mage(uint minLevel, uint maxLevel)
 
 	/***
@@ -146,7 +134,6 @@ public class Mage : Character
         ***/
 		level = dice.RollDice(1, 20);
 		NewMage();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Mage()
 
 	/***

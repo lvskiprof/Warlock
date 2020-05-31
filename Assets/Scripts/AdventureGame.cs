@@ -12,10 +12,8 @@ public class AdventureGame : MonoBehaviour
 	public TextMeshProUGUI TextHeader;    // James added this and it displays in the header area
 	[SerializeField]
 	private Text[] textList;    // This is a list of all our Text fields at run-time
-	[TextArea(1, 8)]			// Define the size of this text field
 	[SerializeField]
 	Text textComponent;         // This is the upper text field, usually used to display information
-	[TextArea(1, 5)]			// Define the size of this text field
 	[SerializeField]
 	Text textAreaComponent;		// This is the lower text field, usually use for entering responses
 	[SerializeField]
@@ -26,7 +24,8 @@ public class AdventureGame : MonoBehaviour
 	public Character _PC;       // This is the Player Character for the player
 	[SerializeField]
 	public Character[] _NPCs;   // These are the NonPlayer Characters for the player
-
+	State interactiveState;		// This is the last state that interacted with the user and required a response
+	string validResponses;		// The list of valid responses for the most recent state with responses
 	State[] nextStates;         // This is here for diagnostics when debugging
 
 
@@ -63,7 +62,8 @@ public class AdventureGame : MonoBehaviour
 		a11_Room_2_FromRoom_1,
 		a12_SurfaceEncounter,
 		a13_DungeonEncounter,
-		a14_ReturnToSavedState
+		a14_ReturnToSavedState,
+		q0_Exit
 	};	// enum StateNames
 
 	/***
@@ -112,8 +112,8 @@ public class AdventureGame : MonoBehaviour
 	}	// AdventureGame Instance
 
 	/***
-   *       This is the base creator that we need to use to access the public methods in this class.
-   ***//*
+	*       This is the base creator that we need to use to access the public methods in this class.
+	***//*
 	public AdventureGame()
 	{   //Instance creator
 
@@ -121,7 +121,7 @@ public class AdventureGame : MonoBehaviour
 
 	/***
     *       This method will output the string argument to the HeadingText field on the screen.
-   ***/
+	***/
 	public void HeadingText(string text)
 	{
 		if (text.Length != 0)
@@ -130,32 +130,38 @@ public class AdventureGame : MonoBehaviour
 
 	/***
     *       This method will output the string argument to the StoryText field on the screen.
-   ***/
+	***/
 	public void StoryText(string text)
 	{
 		if (text.Length != 0)
+		{   // Output something to textComponent
+			if (textComponent == null)  // Shouldn't happen, but removes warning
+				textComponent = gameObject.AddComponent<Text>();
+
 			textComponent.text = text;
-			//textList[(int)TextID.storyText].text = text;
-			//_TextStory.text = text;
+		}	// if
 
 	}   // StoryText()
 
 	/***
-    *       This method will output the string argument to the StoryAreaText field on the screen.
-   ***/
-	public void StoryAreaText(string text)
+    *       This method will output the string argument to the InteractionText field on the screen.
+	***/
+	public void InteractionText(string text)
 	{
 		if (text.Length != 0)
+		{   // Output something to textComponent
+			if (textComponent == null)  // Shouldn't happen, but removes warning
+				textAreaComponent = gameObject.AddComponent<Text>();
+
 			textAreaComponent.text = text;
-			//textList[(int)TextID.storyAreaText].text = text;
-			//_TextBody.text = text;
-	}   // StoryAreaText()
+		}   // if
+	}   // InteractionText()
 
 	/***
     *       Method to handle processing Action methods.  Some states only have an action and then
     *   they move on to the next state.  Others require a valid response first before doing the
     *   action method.  Putting this as a separate method simplifies the code needed to handle actions.
-   ***/
+	***/
 	public bool PerformAction(State state, char response)
 	{
 		bool validResponse = false;
@@ -167,7 +173,9 @@ public class AdventureGame : MonoBehaviour
 				validResponse = true;
 				break;
 			case State.StateAction.exitGame:
-				Application.Quit();
+				Application.Quit(); // We should not return from this, but will if in the editor
+				UnityEditor.EditorApplication.isPlaying = false;	// Handle being in the editor
+				validResponse = true;	// Should never get here
 				break;
 			case State.StateAction.buildParty:
 				validResponse = BuildParty.Instance.BuildExpeditionParty(response);
@@ -175,46 +183,56 @@ public class AdventureGame : MonoBehaviour
 				DelayForStoryText(3);
 				break;
 			case State.StateAction.displayCharacter:
+				StoryText(_PC.GetCharacterInfo());	// See if this calls the specific class as it should
 				switch(_PC.charClass)
 				{
 					case Character.CharType.cleric:
-						((Cleric)_PC).GetCharacterInfo();
+						StoryText(((Cleric)_PC).GetCharacterInfo());
 						break;
 					case Character.CharType.dwarf:
-						((Dwarf)_PC).GetCharacterInfo();
+						StoryText(((Dwarf)_PC).GetCharacterInfo());
 						break;
 					case Character.CharType.elf:
-						((Elf)_PC).GetCharacterInfo();
+						StoryText(((Elf)_PC).GetCharacterInfo());
 						break;
 					case Character.CharType.fighter:
-						((Fighter)_PC).GetCharacterInfo();
+						StoryText(((Fighter)_PC).GetCharacterInfo());
 						break;
 					case Character.CharType.mage:
-						((Mage)_PC).GetCharacterInfo();
+						StoryText(((Mage)_PC).GetCharacterInfo());
 						break;
 					case Character.CharType.thief:
-						((Thief)_PC).GetCharacterInfo();
+						StoryText(((Thief)_PC).GetCharacterInfo());
 						break;
 				}   // switch
 
+				validResponse = true;
 				break;
 			case State.StateAction.displayParty:
+				validResponse = true;
 				break;
 			case State.StateAction.moveToDungeon:
 				// Yet to be written, but state will be changed to nextStates[0]
 				validResponse = true;
 				break;
 			case State.StateAction.buildSurfaceBadGuys:
+				validResponse = true;
 				break;
 			case State.StateAction.buildDungeonBadGuys:
+				validResponse = true;
 				break;
 			case State.StateAction.returnToSavedState:
 				state = savedState;
 				savedState = null;
+				validResponse = true;
 				break;
 			default:
 				// Handle the case where we have defined an action but not written the code
-				StoryAreaText("Unknown state " + action.ToString() + " encountered.");
+				string msgString = "Unknown state " + action.ToString() + " encountered.";
+
+				StoryText(msgString);
+				Debug.LogError(msgString);
+				validResponse = true;
 				break;
 		}   // switch
 
@@ -225,15 +243,17 @@ public class AdventureGame : MonoBehaviour
     *       Method asked for in the class, but not really used here.  Update() handles managing the
     *   current state and moving to the next state for now.  So may want to remove this later or
     *   move the code from Update() into here.
-   ***/
+	***/
 	private void ManageState()
 	{
 		nextStates = state.GetNextStates();
-	}
+		Debug.Log(state.GetStateDescription());	// Maintain a log of state changes.  Useful for debug
+	}   // void ManageState()
 
 	/***
 	*		DelayForStoryText() is used to create a delay of <delay> seconds.  Useful if you
 	*	don't want some test you just displayed to go away before it can be read by the user.
+	*		Note: Does not work.  Need to find out why.
 	***/
 	public IEnumerator DelayForStoryText(Int32 delay)
 	{
@@ -246,33 +266,34 @@ public class AdventureGame : MonoBehaviour
 	void Start()
 	{
 		nextStates = state.GetNextStates();
-		textList = GameObject.FindObjectsOfType<Text>();
+		textList = GameObject.FindObjectsOfType<Text>();	// Not realy used anymore, but good example
+		HeadingText(state.GetStateHeader());
 		StoryText(state.GetStateStory());
-		StoryAreaText(state.GetStateStoryArea());
+		InteractionText(state.GetStateInteraction());
 	}   // Start()
 
 	/***
     *       Update is called once per frame
-   ***/
+	***/
 	void Update()
 	{
 		int i;
-		string validResponses = "";
 		char[] responses;
 		string response = "";
 		const string pleaseEnter = "Please enter in only one character from the list: ";
 
 		responses = state.GetResponses();
-
-		for (i = 0; i < responses.Length; i++)
-		{   // Build up a single string with all the valid response characters in it
-			validResponses += responses[i];
-		}   // for
-
 		if (responses.Length != 0)
-		{   // Check for an input character
+		{   // Build a list of valid responses for this state and get the response
 			response = Input.inputString;
-		}   // if
+			interactiveState = state;
+			validResponses = "";
+			
+			for (i = 0; i < responses.Length; i++)
+			{   // Build up a single string with all the valid response characters in it
+				validResponses += responses[i];
+			}   // for
+		}	// if
 
 		if (response.Length > 1)
 		{   // Reject anything that is not a single character response
@@ -311,13 +332,15 @@ public class AdventureGame : MonoBehaviour
 
 			if (!validResponse)
 			{
-				textList[(int)TextID.storyText].text = pleaseEnter + validResponses;
+				state = interactiveState;
+				StoryText(pleaseEnter + validResponses);
 			}   // if
 			else
-			{   // Change to the next state and output appropriate text (text areas may be blanked)
+			{   // Change to the next state and output appropriate text (text strings may be empty)
 				state = state.GetNextStates()[i];
+				HeadingText(state.GetStateHeader());
 				StoryText(state.GetStateStory());
-				StoryAreaText(state.GetStateStoryArea());
+				InteractionText(state.GetStateInteraction());
 			}   // else
 		}   // else
 

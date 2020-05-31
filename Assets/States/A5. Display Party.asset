@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A5. Display Party
   m_EditorClassIdentifier: 
+  description: 'A5.Display Party state.  This will display the NPCs that were created
+    for the rest of the party and offer the same options as A3.PartyBuilt state did.
+
+
+    NOTE:
+    This has not yet been implemented and may end up with a lot of sub-states when
+    it is.'
+  headerText: 
   storyText: 
-  storyAreaText: 'Enter your choice (CPD): '
-  action: 0
-  responses: 430050004400
+  interactionText: 
+  action: 5
+  responses: 
   nextStates:
-  - {fileID: 11400000, guid: 0159414cb5082b1479d1557950889946, type: 2}
-  - {fileID: 11400000}
-  - {fileID: 11400000, guid: b86c61b2aa4ac1f49a88ed4b69d76f65, type: 2}
+  - {fileID: 11400000, guid: 94744c6be3ee0c04ea369a915da84e63, type: 2}

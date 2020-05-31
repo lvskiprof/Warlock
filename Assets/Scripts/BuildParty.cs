@@ -66,31 +66,34 @@ public class BuildParty : MonoBehaviour
 		switch (response)
 		{
 			case 'M':
-				game.StoryAreaText(selected + "a Mage" + yourCharacter);
+				game.StoryText(selected + "a Mage" + yourCharacter);
 				game._PC = new Mage();
 				break;
 			case 'F':
-				game.StoryAreaText(selected + "a Fighter" + yourCharacter);
+				game.StoryText(selected + "a Fighter" + yourCharacter);
 				game._PC = new Fighter();
 				break;
 			case 'C':
-				game.StoryAreaText(selected + "a Cleric" + yourCharacter);
+				game.StoryText(selected + "a Cleric" + yourCharacter);
 				game._PC = new Cleric();
 				break;
 			case 'T':
-				game.StoryAreaText(selected + "a Thief" + yourCharacter);
+				game.StoryText(selected + "a Thief" + yourCharacter);
 				game._PC = new Thief();
 				break;
 			case 'D':
-				game.StoryAreaText(selected + "a Dwarf" + yourCharacter);
+				game.StoryText(selected + "a Dwarf" + yourCharacter);
 				game._PC = new Dwarf();
 				break;
 			case 'E':
-				game.StoryAreaText(selected + "an Elf" + yourCharacter);
+				game.StoryText(selected + "an Elf" + yourCharacter);
 				game._PC = new Elf();
 				break;
+			case 'Q':
+				break;	// Nothing to do if Quit is selected
 			default:    // Should never be reached, because update handles validating input, but allow for switch not handling all cases the State allows for
-				game.StoryAreaText("You have entered an illegal character.  " +
+				Debug.LogError("Response '" + response + "' is not supported in BultExpeditionParty().");
+				game.StoryText("You have entered an illegal character.  " +
 					"Please enter in only one character from the list: MFCTDE");
 				valid = false;  // Let the caller know that this is not a valid selection
 				break;

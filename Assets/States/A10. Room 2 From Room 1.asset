@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6984e4166faf203429948d9819928318, type: 3}
   m_Name: A10. Room 2 From Room 1
   m_EditorClassIdentifier: 
-  storyText: You move into room #2.  There are two doors in the room.  Enter 1 to
-    go back through the door you came in.  Enter 2 to choose the second door.
-  storyAreaText: 'What door do you want to go through? '
+  description: A10. Room 2 From Room 1 state.  You have entered room 2 from room
+    1.
+  headerText: Inside The Dungeon
+  storyText: You moved into room #2.  There are two doors in the room.
+  interactionText: 'Enter a 1 to go back through the door you came in from,  a 2
+    to go through the other door, or Q to Quit: '
   action: 0
-  responses: 31003200
+  responses: 310032005100
   nextStates:
   - {fileID: 11400000, guid: 05244e7624728f54ead6212ac48e603a, type: 2}
   - {fileID: 11400000, guid: 493d874ab8e9ed84691a35232a3c5c3a, type: 2}
+  - {fileID: 11400000, guid: 46f69f8deac87f14c9b91f0f696da8d8, type: 2}
