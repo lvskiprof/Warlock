@@ -59,7 +59,9 @@ public class State : ScriptableObject
 
 	[TextArea(1, 8)]		// Define the size of this text field
 	[SerializeField]
-	string description="";	// Text to describe what this state is used for, for documentation use only
+	string description="";  // Text to describe what this state is used for, for documentation use only
+	[SerializeField]
+	bool descriptionOutput = false;	// When set to false the description is output via Debug.Log()
 	[TextArea(1, 1)]		// Define the size of this text field
 	[SerializeField]
 	string headerText="";   // Text to output in TextHeader.text if not empty
@@ -86,6 +88,30 @@ public class State : ScriptableObject
 	{
 		return this.description;
 	}   // GetStateDescription()
+
+	/***
+	*		This will get the boolean flag that is used to show if we have output the
+	*	description string for this state using Debug.Log().  If it is false (default)
+	*	we need to output it and then set it to true.  If it is true we are still in
+	*	the same state as before.  This is needed because Update() will be called
+	*	multiple times while waiting for the user to do something that will change the
+	*	state of the game.
+	***/
+	public bool GetStateDescriptionOutput()
+	{
+		return this.descriptionOutput;
+	}   // GetStateDescriptionOutput()
+
+	/***
+	*		This will set the boolean flag to show if we have output the description
+	*	string text or not using Debug.Log().  You use it to set it to false when the
+	*	current state does not match the previous state and set it to true when you
+	*	have output the description string text using Debug.Log().
+	***/
+	public void SetStateDescriptionOutput(bool outputFlag)
+	{
+		this.descriptionOutput = outputFlag;
+	}   // SetStateDescriptionOutput()
 
 	/***
 	*		This will get the string that represents the headerText for this state.

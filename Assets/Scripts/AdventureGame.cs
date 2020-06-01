@@ -229,7 +229,6 @@ public class AdventureGame : MonoBehaviour
 			default:
 				// Handle the case where we have defined an action but not written the code
 				string msgString = "Unknown state " + action.ToString() + " encountered.";
-
 				StoryText(msgString);
 				Debug.LogError(msgString);
 				validResponse = true;
@@ -247,7 +246,11 @@ public class AdventureGame : MonoBehaviour
 	private void ManageState()
 	{
 		nextStates = state.GetNextStates();
-		Debug.Log(state.GetStateDescription());	// Maintain a log of state changes.  Useful for debug
+		if (!state.GetStateDescriptionOutput())
+		{   // Output the description the first time we enter this state
+			Debug.Log(state.GetStateDescription()); // Maintain a log of state changes.  Useful for debug
+			state.SetStateDescriptionOutput(true);
+		}	// if
 	}   // void ManageState()
 
 	/***
@@ -337,7 +340,11 @@ public class AdventureGame : MonoBehaviour
 			}   // if
 			else
 			{   // Change to the next state and output appropriate text (text strings may be empty)
+				State prevState = state;
 				state = state.GetNextStates()[i];
+				if (state != prevState)
+					state.SetStateDescriptionOutput(false);
+
 				HeadingText(state.GetStateHeader());
 				StoryText(state.GetStateStory());
 				InteractionText(state.GetStateInteraction());
