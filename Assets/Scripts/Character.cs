@@ -725,25 +725,23 @@ public class Character : IMagical, IFight, IClerical, IThievish
 	{
 		AdventureGame game = AdventureGame.Instance;
 		string stats;
-
-		game.HeadingText(charClassName + " CharType = " + charClass.ToString());
-		stats = "Level:        " + level + "\n" +
-				"Strength:     " + strength + "\n" +
-				"Intelligence: " + intel + "\n" +
-				"Wisdom:       " + wisdom + "\n" +
-				"Constitution: " + constitution + "\n" +
-				"Dexterity:    " + dex + "\n" +
-				"Agility:      " + agility + "\n" +
-				"Size:         " + size + "\n" +
-				"Attack Bonus: " + attackBonus + "\n" +
-				"Damage:       Multiplier=" + damageMultiplier +
-								 " Bonus=" + damageBonus.ToString() + "/die\n" +
-				"Hits:         " + hits.whole + "." + hits.fractional.fraction +
-								 " Death margin: " + deathMargin +
-								 " Hits bonus: " + (((float)bonusHits) / 10.0f) + "/die" +
-								 " Hit Dice: " + ActualHitDice() + "\n" +
-				"Experience:   " + exp + " (Experience bonus: " + expBonus + "%\n" +
-				"Gold:         " + gold +
+		stats = "Level:\t\t\t\t" + level + "\n" +
+				"Strength:\t\t\t" + strength + "\n" +
+				"Intelligence:\t\t" + intel + "\n" +
+				"Wisdom:\t\t\t" + wisdom + "\n" +
+				"Constitution:\t" + constitution + "\n" +
+				"Dexterity:\t\t\t" + dex + "\n" +
+				"Agility:\t\t\t\t" + agility + "\n" +
+				"Size:\t\t\t\t\t" + size + "\n" +
+				"Attack Bonus:\t" + attackBonus + "\n" +
+				"Damage:\t\t\tMultiplier=" + damageMultiplier +
+								 "\tBonus=" + damageBonus.ToString() + "/die\n" +
+				"Hits:\t\t\t\t\t" + hits.whole + "." + hits.fractional.fraction +
+								 "\t\tDeath margin: " + deathMargin +
+								 "\t\tHits bonus: " + (((float)bonusHits) / 10.0f) + "/die" +
+								 "\t\tHit Dice: " + ActualHitDice() + "\n" +
+				"Experience:\t\t" + exp + "\t\t\tExperience bonus: " + expBonus + "%\n" +
+				"Gold:\t\t\t\t" + gold +
 				"";     // Leave this as the last line so it is easy to add more info above it
 		return stats;
 	}   // GetCharacterInfo()
@@ -784,7 +782,7 @@ public class Character : IMagical, IFight, IClerical, IThievish
 	*	constituion.  In that case you can never have 0 hits for the roll, so we make sure that
 	*	you get at least 1/2 hit for the roll.
 	***/
-	private HitDice AdjustBVyHitBonus(int dieRoll)
+	private HitDice AdjustByHitBonus(int dieRoll)
 	{
 		HitDice adjustedDieRoll = new HitDice();
 		adjustedDieRoll.whole = (int)dieRoll;
@@ -814,7 +812,7 @@ public class Character : IMagical, IFight, IClerical, IThievish
 		}   // if
 
 		return adjustedDieRoll;
-	}   // AdjustBVyHitBonus(int dieRoll)
+	}   // AdjustByHitBonus(int dieRoll)
 
 	/***
 	*		This will roll any hit dice that have not been rolled for the current level.
@@ -857,7 +855,7 @@ public class Character : IMagical, IFight, IClerical, IThievish
 						else
 							diceToRoll.fractional.fraction = 2; // We need to roll a 2-sided die for 1/3 die
 
-						newHits = AdjustBVyHitBonus(dice.RollDice(1, diceToRoll.fractional.fraction));
+						newHits = AdjustByHitBonus(dice.RollDice(1, diceToRoll.fractional.fraction));
 						if (diceToRoll.whole != 0)
 							diceToRoll.whole--; // We are rolling up from a factional to a whole
 					}   // if
@@ -876,7 +874,7 @@ public class Character : IMagical, IFight, IClerical, IThievish
 				{   // We have a change in whole dice since the previous level (may be more than 1)
 					for (int j = 0; j < diceToRoll.whole; j++)
 					{   // Roll each die and adjust it separately
-						HitDice hitsRolled = AdjustBVyHitBonus(dice.RollDice(
+						HitDice hitsRolled = AdjustByHitBonus(dice.RollDice(
 																(int)diceToRoll.whole, 6));
 						newHits.whole += hitsRolled.whole;
 						newHits.fractional.fraction += hitsRolled.fractional.fraction;

@@ -179,7 +179,6 @@ public class Elf : Character
 		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewElf();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Elf(int minLevel, int maxLevel)
 
 	/***
@@ -196,6 +195,5 @@ public class Elf : Character
         ***/
 		level = dice.RollDice(1, 20);
 		NewElf();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Elf()
 }   // class Elf

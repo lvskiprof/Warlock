@@ -93,8 +93,6 @@ public class BuildParty : MonoBehaviour
 				break;	// Nothing to do if Quit is selected
 			default:    // Should never be reached, because update handles validating input, but allow for switch not handling all cases the State allows for
 				Debug.LogError("Response '" + response + "' is not supported in BultExpeditionParty().");
-				game.StoryText("You have entered an illegal character.  " +
-					"Please enter in only one character from the list: MFCTDE");
 				valid = false;  // Let the caller know that this is not a valid selection
 				break;
 		}   // switch

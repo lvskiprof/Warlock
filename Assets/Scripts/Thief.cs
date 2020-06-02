@@ -95,7 +95,6 @@ public class Thief : Character
 		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewThief();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Thief(int minLevel, int maxLevel)
 
 	/***
@@ -112,6 +111,5 @@ public class Thief : Character
         ***/
 		level = dice.RollDice(1, 20);
 		NewThief();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Thief()
 }	// class Thief

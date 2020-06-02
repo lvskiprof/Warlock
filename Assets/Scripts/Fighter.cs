@@ -87,7 +87,6 @@ public class Fighter : Character
 		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewFighter();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Fighter(int minLevel, int maxLevel)
 
 	/***
@@ -104,6 +103,5 @@ public class Fighter : Character
         ***/
 		level = dice.RollDice(1, 20);
 		NewFighter();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Fighter()
 }	// class Fighter

@@ -87,7 +87,6 @@ public class Dwarf : Character
 		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewDwarf();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Dwarf(int minLevel, int maxLevel)
 
 	/***
@@ -104,6 +103,5 @@ public class Dwarf : Character
         ***/
 		level = dice.RollDice(1, 20);
 		NewDwarf();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Dwarf()
 }   // class Dwarf

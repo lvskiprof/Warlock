@@ -86,7 +86,6 @@ public class Cleric : Character
 		***/
 		level = dice.RollDice(1, (maxLevel - minLevel) + 1) + minLevel;
 		NewCleric();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Cleric(int minLevel, int maxLevel)
 
 	/***
@@ -103,6 +102,5 @@ public class Cleric : Character
        ***/
 		level = dice.RollDice(1, 20);
 		NewCleric();
-		AdventureGame.Instance.StoryText(GetCharacterInfo());
 	}   // Cleric()
 }	// class Cleric

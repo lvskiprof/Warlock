@@ -57,7 +57,6 @@ public class State : ScriptableObject
 		returnToSavedState  // Return from current state to last saved state (might be a LIFO later)
 	};  // enum StateAction
 
-	[TextArea(1, 8)]		// Define the size of this text field
 	[SerializeField]
 	string description="";  // Text to describe what this state is used for, for documentation use only
 	[SerializeField]
@@ -65,7 +64,7 @@ public class State : ScriptableObject
 	[TextArea(1, 1)]		// Define the size of this text field
 	[SerializeField]
 	string headerText="";   // Text to output in TextHeader.text if not empty
-	[TextArea(1, 8)]		// Define the size of this text field
+	[TextArea(1, 14)]		// Define the size of this text field
 	[SerializeField]
 	string storyText="";       // Text to output in storyText.text if not empty
 	[TextArea(1, 5)]        // Define the size of this text field

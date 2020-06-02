@@ -11,11 +11,9 @@ public class AdventureGame : MonoBehaviour
 	[SerializeField]
 	public TextMeshProUGUI TextHeader;    // James added this and it displays in the header area
 	[SerializeField]
-	private Text[] textList;    // This is a list of all our Text fields at run-time
+	Text storyText;				// This is the upper text field, usually used to display information
 	[SerializeField]
-	Text textComponent;         // This is the upper text field, usually used to display information
-	[SerializeField]
-	Text textAreaComponent;		// This is the lower text field, usually use for entering responses
+	Text interactionText;		// This is the lower text field, usually use for entering responses
 	[SerializeField]
 	public State state;			// This is our current state
 	[SerializeField]
@@ -27,18 +25,6 @@ public class AdventureGame : MonoBehaviour
 	State interactiveState;		// This is the last state that interacted with the user and required a response
 	string validResponses;		// The list of valid responses for the most recent state with responses
 	State[] nextStates;         // This is here for diagnostics when debugging
-
-
-	/***
-	*		This are indexes to the various text fields, the order of which was found by
-	*	and error.  It can be eliminated if James can explain how he ties specific Text
-	*	definitions to the fields in the Unity GUI.
-	***/
-	private enum TextID
-	{   // Index values into textComponents[] to get at the different text areas
-		storyText,      // Story text where what is going on is displayed
-		storyAreaText,  // Story area text where questions and responses are displayed
-	};  // TextID
 
 	/***
 	*		That is a state object that is used to contain a list of all possible states for the game.
@@ -134,11 +120,11 @@ public class AdventureGame : MonoBehaviour
 	public void StoryText(string text)
 	{
 		if (text.Length != 0)
-		{   // Output something to textComponent
-			if (textComponent == null)  // Shouldn't happen, but removes warning
-				textComponent = gameObject.AddComponent<Text>();
+		{   // Output something to storyText
+			if (storyText == null)  // Shouldn't happen, but removes warning
+				storyText = gameObject.AddComponent<Text>();
 
-			textComponent.text = text;
+			storyText.text = text;
 		}	// if
 
 	}   // StoryText()
@@ -149,11 +135,11 @@ public class AdventureGame : MonoBehaviour
 	public void InteractionText(string text)
 	{
 		if (text.Length != 0)
-		{   // Output something to textComponent
-			if (textComponent == null)  // Shouldn't happen, but removes warning
-				textAreaComponent = gameObject.AddComponent<Text>();
+		{   // Output something to storyText
+			if (storyText == null)  // Shouldn't happen, but removes warning
+				interactionText = gameObject.AddComponent<Text>();
 
-			textAreaComponent.text = text;
+			interactionText.text = text;
 		}   // if
 	}   // InteractionText()
 
@@ -183,7 +169,7 @@ public class AdventureGame : MonoBehaviour
 				DelayForStoryText(3);
 				break;
 			case State.StateAction.displayCharacter:
-				StoryText(_PC.GetCharacterInfo());	// See if this calls the specific class as it should
+				HeadingText(_PC.charClassName);	// Output the type of character as the header
 				switch(_PC.charClass)
 				{
 					case Character.CharType.cleric:
@@ -209,6 +195,8 @@ public class AdventureGame : MonoBehaviour
 				validResponse = true;
 				break;
 			case State.StateAction.displayParty:
+				HeadingText("Display Party");
+				StoryText("Not implemented yet...");
 				validResponse = true;
 				break;
 			case State.StateAction.moveToDungeon:
@@ -269,7 +257,7 @@ public class AdventureGame : MonoBehaviour
 	void Start()
 	{
 		nextStates = state.GetNextStates();
-		textList = GameObject.FindObjectsOfType<Text>();	// Not realy used anymore, but good example
+		//textList = GameObject.FindObjectsOfType<Text>();	// Not realy used anymore, but good example
 		HeadingText(state.GetStateHeader());
 		StoryText(state.GetStateStory());
 		InteractionText(state.GetStateInteraction());
@@ -300,7 +288,7 @@ public class AdventureGame : MonoBehaviour
 
 		if (response.Length > 1)
 		{   // Reject anything that is not a single character response
-			textList[(int)TextID.storyText].text = pleaseEnter + validResponses;
+			StoryText(pleaseEnter + validResponses);
 		}   // if
 		else if (response.Length == 0 && responses.Length != 0)
 		{   // Ignore a length of 0

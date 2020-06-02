@@ -27,12 +27,12 @@ public class Mage : Character
 		else if (bonusSP == 10)
 			fractionSP = "+1";
 		else
-			fractionSP = "+0;";
+			fractionSP = "+0";
 
 		return base.GetCharacterInfo() + "\n" +
-			   "Spell points:\t" + spellPoints.whole + "." + spellPoints.fractional.fraction +
-			   "\tSP bonus: " + fractionSP + " SP/die" +
-			   " Magic class:\t" + magicClass + "\n" +
+			   "Spell points:\t\t" + spellPoints.whole + "." + spellPoints.fractional.fraction +
+			   "\t\tSP bonus: " + fractionSP + " SP/die" +
+			   "\t\tMagic class: " + magicClass + "\n" +
 			   "";
 	}   // GetCharacterInfo()
 
