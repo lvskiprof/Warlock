@@ -99,8 +99,7 @@ public class BuildParty : MonoBehaviour
 
 		if (valid)
 		{   // Create this character and the rest of the party and go to the next state
-			game.DelayForStoryText(3); // Sleep for 3 seconds so text can be read
-
+			StartCoroutine(game.DelayForStoryText(3));	// Sleep for 3 seconds so text can be read
 		}   // if
 
 		return valid;

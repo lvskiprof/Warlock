@@ -26,7 +26,7 @@ public class Dice
 	{
 		int total = 0;
 		int die;
-		float sidesPlusOne = (float)(numSides + 1);
+		int sidesPlusOne = numSides + 1;
 
 		if (numDice > 100)
 		{   // Don't allow numDice to be super large due to a math error, as that will take too long
@@ -36,14 +36,14 @@ public class Dice
 
 		for (int i = 0; i < numDice; i++)
 		{
-			int gigo = (int)Random.Range(1.0f, 10.0f);	// This can be a constant number if you want
+			int gigo = Random.Range(1, 11);	// This can be a constant number if you want
 
 			for (int j = 0; j < gigo; j++)
 			{   // Throw away from 1 to 10 random numbers to ensure true randomness
-				die = (int)Random.Range(1.0f, 10.0f);
+				die = Random.Range(1, 11);
 			}   // for
 
-			die = (int)Random.Range(1.0f, sidesPlusOne);	// Use this value as the die roll
+			die = Random.Range(1, sidesPlusOne);	// Use this value as the die roll
 			total += die;
 		}   // for
 

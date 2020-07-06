@@ -165,8 +165,6 @@ public class AdventureGame : MonoBehaviour
 				break;
 			case State.StateAction.buildParty:
 				validResponse = BuildParty.Instance.BuildExpeditionParty(response);
-				StartCoroutine(DelayForStoryText(3));
-				DelayForStoryText(3);
 				break;
 			case State.StateAction.displayCharacter:
 				HeadingText(_PC.charClassName);	// Output the type of character as the header
@@ -244,7 +242,7 @@ public class AdventureGame : MonoBehaviour
 	/***
 	*		DelayForStoryText() is used to create a delay of <delay> seconds.  Useful if you
 	*	don't want some test you just displayed to go away before it can be read by the user.
-	*		Note: Does not work.  Need to find out why.
+	*		To use this you need to invoke it like this: StartCoroutine(DelayForStoryText(3));
 	***/
 	public IEnumerator DelayForStoryText(Int32 delay)
 	{
