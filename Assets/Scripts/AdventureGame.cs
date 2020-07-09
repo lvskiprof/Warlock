@@ -160,7 +160,7 @@ public class AdventureGame : MonoBehaviour
 				break;
 			case State.StateAction.exitGame:
 				Application.Quit(); // We should not return from this, but will if in the editor
-				//UnityEditor.EditorApplication.isPlaying = false;	// Handle being in the editor
+				UnityEditor.EditorApplication.isPlaying = false;	// Handle being in the editor
 				validResponse = true;	// Should never get here
 				break;
 			case State.StateAction.buildParty:
